@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.js",
+      "use": "@vercel/node",
+      "config": {}
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/", 
+      "timeout" : 30
+    }
+  ]
+} 
