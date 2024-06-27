@@ -14,7 +14,6 @@ app.use(cors());
 
 app.use('/app/user', usersApi)
 app.use('/app/post', postApi)
-// app.use('/app/otp' , otpApi) 
 
 app.get('/' , (req, res) => {
   res.send('Hello World!')

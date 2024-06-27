@@ -15,6 +15,8 @@ router.use(express.json())
 const MY_EMAIL = process.env.MY_EMAIL
 const MY_EMAIL_PASSWORD = process.env.MY_EMAIL_PASSWORD
 
+console.log(MY_EMAIL , MY_EMAIL_PASSWORD)
+
 let otpStore={}
 const transporter = nodemailer.createTransport({
   service : "Gmail",
@@ -27,7 +29,7 @@ const transporter = nodemailer.createTransport({
 //Sign Up
 router.post('/get-otp', async (req, res) => {
   try {
-    const { name, email, phone, password } = req.body;
+    const { email, phone } = req.body;
 
     const existingEmail = await userModel.findOne({ email: email })
     const existingPhone = await userModel.findOne({ phone: phone })
@@ -53,7 +55,7 @@ router.post('/get-otp', async (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error)
-        return res.status(404).json({ message: "OTP can not sent" })
+        return res.status(404).json({ message: "OTP can not sent" } , {MY_EMAIL , MY_EMAIL_PASSWORD})
       }
       console.log('Email sent: ' + info.response)
       return res.status(200).json({ message: "OTP sent to your Number" })
