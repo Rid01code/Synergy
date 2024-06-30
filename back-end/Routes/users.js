@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
   },
   tls: { rejectUnauthorized: false }
 })
-//Sign Up
+//Get OTP
 router.post('/get-otp', async (req, res) => {
   try {
     const { email, phone } = req.body;
