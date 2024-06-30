@@ -43,7 +43,7 @@ router.post('/upload-post', authenticateToken, async (req, res) => {
 router.get('/get-post', authenticateToken, async(req , res) => {
   try {
     const posts = await postModel.find().populate('userId', 'name').sort({ date: -1 }).exec()
-    res.status(200).json({ posts:post })
+    res.status(200).json({ posts: posts })
   } catch (error) {
     console.log(error)
     return res.status(500).json({ message: "Internal Server Error" })
