@@ -11,6 +11,7 @@ import { useStore, useSelector } from 'react-redux';
 const LogIn = () => {
 
   const port_uri = process.env.PORT_URL
+  console.log(port_uri)
 
   const store = useStore()
 

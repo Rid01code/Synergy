@@ -13,6 +13,7 @@ import { IoIosSend } from "react-icons/io";
 const Contact = () => {
 
   const port_uri = process.env.PORT_URL
+  console.log(port_uri)
 
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
@@ -59,7 +60,7 @@ const Contact = () => {
     fetchCurrentUser();
     fetchUsers();
 
-    socketRef.current = io(SOCKET_URL, {
+    socketRef.current = io(port_uri, {
       transports: ['websocket', 'polling'],
       withCredentials: true
     });
