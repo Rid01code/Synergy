@@ -11,14 +11,21 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  profilePic: {
+    type: String
+  },
   title: {
     type: String,
-    trim: true,
-    required: true
+    trim: true
   },
   photoUrl: {
     type: String,
-    required: true
+  },
+  textContent: {
+    type: String,
+  },
+  theme: {
+    type: String,
   },
   hashtags: {
     type: [String]

@@ -10,7 +10,7 @@ router.use(express.json())
 //Upload Post
 router.post('/upload-post', authenticateToken, async (req, res) => {
   try {
-    const { title, photoUrl, hashtags } = req.body
+    const { title, photoUrl, hashtags, textContent, theme } = req.body
     const { id } = req.headers
     const user = await userModel.findById(id)
 
@@ -20,9 +20,12 @@ router.post('/upload-post', authenticateToken, async (req, res) => {
 
     const newPost = new postModel({
       userId: id,
-      name : user.name,
+      name: user.name,
+      profilePic: user.profilePic,
       title: title,
       photoUrl: photoUrl,
+      textContent: textContent,
+      theme: theme,
       hashtags: hashtags
     })
     const savePost = await newPost.save()
@@ -69,8 +72,8 @@ router.put('/add-likes/:postId', authenticateToken, async (req, res) => {
       return res.status(404).json({ message: "User Not Found" })
     }
 
-    if (post.likes.includes(user._id)) {
-      return res.status(400).json({ message: "You All Ready Liked This Post" })
+    if (post.likes.some((like) => like.userId.equals(user._id))) {
+      return res.status(400).json({ message: "You already liked this post" });
     }
 
     post.likes.push({
@@ -103,7 +106,15 @@ router.get('/get-likes/:postId' ,authenticateToken, async(req, res) => {
       userId: like.userId,
     }))
 
-    return res.status(200).json({likesCount , usersWhoLike})
+    const { id } = req.headers;
+    const user = await userModel.findById(id)
+    if (!user) { 
+      return res.status(404).json({message : "User Not Found"})
+    }
+
+    const hasLiked = post.likes.some((like)=>like.userId.equals(user._id))
+
+    return res.status(200).json({likesCount , usersWhoLike , hasLiked})
   } catch (error) {
     console.log(error)
     return res.status(500).json({message : "Internal Server Error"})
@@ -129,14 +140,14 @@ router.put('/add-comments/:postId', authenticateToken, async(req, res) => {
       return res.status(404).json({message : "User Not Found"})
     }
 
-    const { comments } = req.body
-    if (!comments) {
-      return res.status(404).json({message: "Comment not Found"})
+    const { comment } = req.body
+    if (!comment) {
+      return res.status(404).json({message: "Comment is required"})
     }
 
     post.comments.push({
       userId: user._id,
-      text : comments
+      text: comment
     })
     await post.save()
     return res.status(200).json({message : "Comment Added Successfully"})
@@ -160,10 +171,10 @@ router.get('/get-comments/:postId', authenticateToken, async (req, res) => {
     }
 
     const numberOfComments = post.comments.length
-    const whoComments = post.comments.map((comment) => ({ userId: comment.userId }))
-    const comments = post.comments.map((comment) => ({ comment: comment.text }))
+    // const whoComments = post.comments.map((comment) => ({ userId: comment.userId }))
+    const comments = post.comments.map((comment) => ({ comment: comment.text , userId: comment.userId }))
     
-    return res.status(200).json({ numberOfComments, whoComments, comments })
+    return res.status(200).json({ numberOfComments, comments })
   } catch (error) {
     console.log(error)
     return res.status(500).json({message : "Internal Server Error"})

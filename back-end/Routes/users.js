@@ -9,7 +9,6 @@ const generateOtp = require('../utilities/generateOTP')
 const authenticateToken = require('../Auth/auth')
 require('dotenv').config()
 
-
 router.use(express.json())
 
 const MY_EMAIL = process.env.MY_EMAIL
@@ -128,6 +127,35 @@ router.post('/log-in', async (req, res) => {
   }
 });
 
+//Add profilePic and bio
+router.put('/update-profile', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.headers.id
+    const { profilePic, bio } = req.body
+
+    const user = await userModel.findById(userId)
+
+    if (!user) {
+      return res.status(404).json({ message: "User Not Found" })
+    }
+
+    if (profilePic) {
+      user.profilePic = profilePic;
+    }
+
+    if (bio) {
+      user.bio = bio;
+    }
+
+    await user.save();
+
+    return res.status(200).json({ message: "Profile Updated Successfully" })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: "Internal Server Error" })
+  }
+})
+
 //Get User Info
 router.get('/user-info',authenticateToken ,  async (req, res) => { 
   try {
@@ -137,7 +165,10 @@ router.get('/user-info',authenticateToken ,  async (req, res) => {
       return res.status(400).json({ message: "User Not Found" })
     }
     const userInfo = {
-      name : user.name,
+      id: user._id,
+      profilePic: user.profilePic,
+      name: user.name,
+      bio: user.bio,
       email : user.email,
       phone : user.phone
     }
@@ -160,6 +191,63 @@ router.get('/user-info-byId/:userId', authenticateToken, async (req, res) => {
   } catch (error) {
     console.log(error)
     return res.status(200).json({message : "Internal Server Error"})
+  }
+})
+
+//Get all user
+router.get('/all-users', authenticateToken, async (req, res) => {
+  try {
+    const users = await userModel.find()
+    return res.status(200).json({ users })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: "Internal Server Error" })
+  }
+})
+
+//Search Users
+router.get('/search-users', authenticateToken, async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) {
+      return res.status(400).json({ message: "Query is required" });
+    }
+
+    const users = await userModel.find({
+      name: { $regex: `^${query}`, $options: 'i' }
+    }).limit(10);  // Limit the results to 10 suggestions
+
+    const suggestions = users.map(user => user.name);
+
+    return res.status(200).json({ suggestions });
+  } catch (error) {
+    console.error('Error in search-users route:', error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+//Get Searched user Info
+router.get('/search-user-info', authenticateToken, async (req, res) => { 
+  try {
+    const { query } = req.query
+    if (!query) { 
+      return res.status(400).json({ message: "Query is required" });
+    }
+
+    const user = await userModel.findOne({
+      name: { $regex: `^${query}`, $options: 'i' }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User Not Found" });
+    }
+
+    const userInfo = {
+      id: user._id,
+    }
+    return res.status(200).json({userInfo})
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 })
 

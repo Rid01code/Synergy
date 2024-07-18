@@ -6,6 +6,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  profilePic: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
   email: {
     type: String,
     required: true,
@@ -24,7 +30,7 @@ const userSchema = new mongoose.Schema({
     trim: true
   },
   posts: {
-    type: mongoose.Types.ObjectId,
+    type: [mongoose.Types.ObjectId],
     ref: 'PostModel'
   }
 })
