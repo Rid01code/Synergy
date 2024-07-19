@@ -13,7 +13,8 @@ import { IoIosSend } from "react-icons/io";
 const Contact = () => {
 
   const port_uri = process.env.PORT_URL
-  console.log(port_uri)
+  
+  const socket = 'https://synergy-api.vercel.app/'
 
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
@@ -60,10 +61,15 @@ const Contact = () => {
     fetchCurrentUser();
     fetchUsers();
 
-    socketRef.current = io(port_uri, {
+    socketRef.current = io(socket, {
       transports: ['websocket', 'polling'],
-      withCredentials: true
-    });
+      withCredentials: true,
+      upgrade: false,
+      forceNew: true,
+      reconnection: true,
+      timeout: 20000,
+      secure: true,
+    })
 
     socketRef.current.on('connect', () => {
       console.log('Connected to Socket.IO server');
@@ -71,6 +77,11 @@ const Contact = () => {
 
     socketRef.current.on('connect_error', (error) => {
       console.error('Socket.IO connection error:', error);
+      console.error('Error details:', error.message, error.description); 
+    });
+
+    socketRef.current.on('error', (error) => {
+      console.error('Socket general error:', error);
     });
 
     socketRef.current.on('newMessage', handleNewMessage);

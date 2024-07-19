@@ -27,9 +27,10 @@ const io = socketIo(server, {
   cors: {
     origin: "*", // Replace with your frontend URL
     methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
+    allowedHeaders: ["*"],
     credentials: true
-  }
+  },
+  transports: ['webSocket' , 'polling']
 })
 
 chatApi.initializeSocket(io);

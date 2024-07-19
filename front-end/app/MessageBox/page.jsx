@@ -7,9 +7,13 @@ import { LuUserCircle2 } from "react-icons/lu";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import styles from  "../../styles/allcss.module.css"
 
-const port_uri = process.env.PORT_URL
-
 const ChatPage = () => {
+
+  const port_uri = process.env.PORT_URL
+
+  const socket = 'https://synergy-api.vercel.app/'
+
+
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -83,7 +87,7 @@ const ChatPage = () => {
       .catch(() => setIsLoading(false));
 
     //Set up SocketIo
-    socketRef.current = io(SOCKET_URL, {
+    socketRef.current = io(socket, {
       transports: ['websocket', 'polling'],
       withCredentials: true
     });
