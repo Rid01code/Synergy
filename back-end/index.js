@@ -9,17 +9,10 @@ const chatApi = require('./Routes/chatMessage.js')
 require('dotenv').config();
 
 const app = express()
-const server = http.createServer(app)
-const io = socketIo(server, {
-  cors: {
-    origin: "*", // Replace with your frontend URL
-    methods: ["GET", "POST"]
-  }
-})
-
 const port = 5000
 
 app.use(cors());
+
 
 app.use('/app/user', usersApi)
 app.use('/app/post', postApi)
@@ -29,8 +22,18 @@ app.get('/' , (req, res) => {
   res.send('Hello World!')
 })
 
+const server = http.createServer(app)
+const io = socketIo(server, {
+  cors: {
+    origin: "*", // Replace with your frontend URL
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  }
+})
+
 chatApi.initializeSocket(io);
 
-server.listen(port, () => {
-  console.log(`Listening on port ${port}`)
+server.listen(port ,() => {
+  console.log('Listening on port')
 })
