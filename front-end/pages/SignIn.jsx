@@ -42,7 +42,7 @@ const SignIn = () => {
         SignInPassword.current.value = '';
         SignInReEnterPassword.current.value = '';
       } else {
-        await axios.post(`${port_uri}/app/user/get-otp`, {
+        await axios.post(`${port_uri}app/user/get-otp`, {
           email: email
         })
         toast.success("OTP send to your email")

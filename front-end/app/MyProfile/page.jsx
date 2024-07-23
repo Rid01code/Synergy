@@ -62,7 +62,7 @@ const page = () => {
         const data = await res.json()
         const imageUrl = data.secure_url;
 
-        const response = await axios.put(`${port_uri}/app/user/update-profile`, {
+        const response = await axios.put(`${port_uri}app/user/update-profile`, {
           profilePic: imageUrl,
         }, { headers })
         
@@ -74,7 +74,7 @@ const page = () => {
       }
 
       if (bio) {
-        const response = await axios.put(`${port_uri}/app/user/update-profile`, {
+        const response = await axios.put(`${port_uri}app/user/update-profile`, {
           bio: bio
         }, { headers })
         setIsBioEditable(false)
@@ -95,7 +95,7 @@ const page = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(`${port_uri}/app/user/user-info`, { headers })
+        const response = await axios.get(`${port_uri}app/user/user-info`, { headers })
       
         setUserPic(response.data.userInfo.profilePic)
         setUserName(response.data.userInfo.name)

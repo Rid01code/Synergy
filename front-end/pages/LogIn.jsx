@@ -11,7 +11,6 @@ import { useStore, useSelector } from 'react-redux';
 const LogIn = () => {
 
   const port_uri = process.env.PORT_URL
-  console.log(port_uri)
 
   const store = useStore()
 
@@ -33,7 +32,7 @@ const LogIn = () => {
     const emailOrPhone = SignInEmailOrPhone.current.value
     const password = SignInPassword.current.value
     try {
-      const response = await axios.post(`${port_uri}/app/user/log-in`, {
+      const response = await axios.post(`${port_uri}app/user/log-in`, {
         emailOrPhone: emailOrPhone,
         password: password
       })

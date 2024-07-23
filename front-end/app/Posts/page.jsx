@@ -77,7 +77,7 @@ function posts() {
   //Get all post
   const fetchPosts = async () => {
     try {
-      const response = await axios.get(`${port_uri}/app/post/get-post`, { headers });
+      const response = await axios.get(`${port_uri}app/post/get-post`, { headers });
       setAllPost(response.data.posts);
       setIsLoading(false);
     } catch (error) {
@@ -93,7 +93,7 @@ function posts() {
   //Add Like
   const addLike = async (post) => {
     try {
-      const response = await axios.put(`${port_uri}/app/post/add-likes/${post._id}`, {}, { headers });
+      const response = await axios.put(`${port_uri}app/post/add-likes/${post._id}`, {}, { headers });
 
       setPostLikes((prevPostLikes) => ({
         ...prevPostLikes,
@@ -119,11 +119,11 @@ function posts() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(`${port_uri}/app/post/get-post`, { headers });
+        const response = await axios.get(`${port_uri}app/post/get-post`, { headers });
         const posts = response.data.posts;
         const postLikesObj = {};
         await Promise.all(posts.map(async (post) => {
-          const likesResponse = await axios.get(`${port_uri}/app/post/get-likes/${post._id}`, { headers });
+          const likesResponse = await axios.get(`${port_uri}app/post/get-likes/${post._id}`, { headers });
           postLikesObj[post._id] = {
             likesCount: likesResponse.data.likesCount,
             usersWhoLike: likesResponse.data.usersWhoLike,
@@ -156,9 +156,9 @@ function posts() {
   //Add comment
   const addComments = async (post) => {
     try {
-      const response = await axios.put(`${port_uri}/app/post/add-comments/${post._id}`, { comment: AddComment }, { headers });
+      const response = await axios.put(`${port_uri}app/post/add-comments/${post._id}`, { comment: AddComment }, { headers });
 
-      const currentUserResponse = await axios.get('${port_uri}/app/user/user-info', { headers });
+      const currentUserResponse = await axios.get('${port_uri}app/user/user-info', { headers });
       const currentUserName = currentUserResponse.data.userInfo.name;
       setPostComment((prevPostComment) => ({
         ...prevPostComment,
@@ -187,11 +187,11 @@ function posts() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(`${port_uri}/app/post/get-post`, { headers });
+        const response = await axios.get(`${port_uri}app/post/get-post`, { headers });
         const posts = response.data.posts;
         const postCommentsObj = {};
         await Promise.all(posts.map(async (post) => {
-          const commentsResponse = await axios.get(`${port_uri}/app/post/get-comments/${post._id}`, { headers });
+          const commentsResponse = await axios.get(`${port_uri}app/post/get-comments/${post._id}`, { headers });
           postCommentsObj[post._id] = {
             commentsCount: commentsResponse.data.numberOfComments,
             usersWhoComment: commentsResponse.data.comments,
@@ -220,7 +220,7 @@ function posts() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(`${port_uri}/app/user/user-info`, { headers });
+        const response = await axios.get(`${port_uri}app/user/user-info`, { headers });
         setUserProfilePic(response.data.userInfo.profilePic);
       } catch (error) {
       }
@@ -238,7 +238,7 @@ function posts() {
     console.log(theme)
 
     try {
-      const response = await axios.post(`${port_uri}/app/post/upload-post`, {
+      const response = await axios.post(`${port_uri}app/post/upload-post`, {
         textContent: textContent,
         theme: theme
       }, { headers })

@@ -5,6 +5,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const VerifyOTP = ({ SignInName, SignInPhone, SignInEmail, SignInPassword, setIsOpenPopUp }) => {
+
+  const port_uri = process.env.PORT_URL
   const [otp, setOtp] = useState(['', '', '', '']);
   const inputRefs = [useRef(), useRef(), useRef(), useRef()];
 
@@ -41,7 +43,7 @@ const VerifyOTP = ({ SignInName, SignInPhone, SignInEmail, SignInPassword, setIs
     const email = SignInEmail.current.value
     const password = SignInPassword.current.value
     try {
-      await axios.post(`${port_uri}/app/user/sign-in`, {
+      await axios.post(`${port_uri}app/user/sign-in`, {
         name: name,
         email: email,
         phone: phone,

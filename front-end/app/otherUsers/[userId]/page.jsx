@@ -30,7 +30,7 @@ const page = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(`${port_uri}/app/user/user-info-byId/${userId}`, { headers })
+        const response = await axios.get(`${port_uri}app/user/user-info-byId/${userId}`, { headers })
         setUserName(response.data.user.name)
         setUserProfilePic(response.data.user.profilePic)
         setUserEmail(response.data.user.email)

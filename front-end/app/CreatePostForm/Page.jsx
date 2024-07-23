@@ -54,7 +54,7 @@ const page = ({closeButton}) => {
         const data = await res.json()
         const imageUrl = data.secure_url;
 
-        await axios.post(`${port_uri}/app/post/upload-post`, {
+        await axios.post(`${port_uri}app/post/upload-post`, {
           title: title,
           hashtags: tags,
           photoUrl: imageUrl
