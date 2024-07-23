@@ -14,7 +14,7 @@ const Contact = () => {
 
   const port_uri = process.env.PORT_URL
   
-  const socket = 'https://synergy-api.vercel.app/'
+  const socket = 'http://localhost:5000'
 
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
@@ -193,7 +193,7 @@ const Contact = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className={`overflow-y-auto ${styles.scrollbar_hide}`}>
             {messages.map((message, index) => (
               <div
                 key={index}

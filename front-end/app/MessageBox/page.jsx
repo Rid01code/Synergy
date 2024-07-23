@@ -11,7 +11,7 @@ const ChatPage = () => {
 
   const port_uri = process.env.PORT_URL
 
-  const socket = 'https://synergy-api.vercel.app/'
+  const socket = 'http://localhost:5000'
 
 
   const [users, setUsers] = useState([]);
