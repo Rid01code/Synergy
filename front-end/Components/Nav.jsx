@@ -133,11 +133,11 @@ const Nav = () => {
               onKeyDown={(e) => handleKeyDown(e)}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className={`w-10 h-10 rounded-lg border-none outline-none py-[18px] px-4 bg-transparent cursor-pointer transition-all duration-500 ease-in-out
+              className={`w-10 h-10 rounded-lg border-none outline-none py-4 px-4 bg-transparent cursor-pointer transition-all duration-500 ease-in-out
               placeholder:text-transparent
-              focus:bg-slate-200 focus:border focus:border-[rgb(98,0,255)] focus:w-[230px] focus:cursor-default focus:pl-12
-              ${(isFocused || hasValue) ? 'bg-white border border-[rgb(98,0,255)] w-[230px] cursor-default pl-12' : ''}
-              focus:placeholder:text-[rgb(60,59,59)]`}
+              focus:bg-slate-200 focus:border focus:border-purple-600 focus:w-56 focus:cursor-default focus:pl-12
+              ${(isFocused || hasValue) ? 'bg-white border border-purple-600 w-56 cursor-default pl-12' : ''}
+              focus:placeholder:text-gray-700`}
             />
             {
               suggestion.length > 0 && (
@@ -146,7 +146,7 @@ const Nav = () => {
                   {suggestion.map((suggestion, index) => (
                     <li
                       onClick={() => { handleSuggestionClick(suggestion) }}
-                      className='flex gap-1 justify-center items-center py-3 px-5 border-b-[1px] border-b-gray-200 hover:bg-slate-400'
+                      className='flex gap-1 justify-center items-center py-3 px-5 border-b border-b-gray-200 hover:bg-slate-400'
                       key={index}
                     > {suggestion}
                       <GoArrowUpRight size={15} />
@@ -158,9 +158,9 @@ const Nav = () => {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              className={`absolute left-0 top-0 h-10 w-10 bg-white rounded-lg transition-all duration-200 ease-in-out fill-[rgb(98,0,255)] border border-[rgb(98,0,255)]
+              className={`absolute left-0 top-0 h-10 w-10 bg-white rounded-lg transition-all duration-200 ease-in-out fill-purple-600 border border-purple-600
               ${(isFocused || hasValue) ? 'z-0 bg-transparent border-none' : '-z-10'}
-              group-hover:rotate-[360deg]`}
+              group-hover:rotate-360`}
             >
               <g strokeWidth="0" id="SVGRepo_bgCarrier"></g>
               <g strokeLinejoin="round" strokeLinecap="round" id="SVGRepo_tracerCarrier"></g>
@@ -175,7 +175,7 @@ const Nav = () => {
           <Link href='/MyProfile' onClick={(e)=>handleTransition(e , '/MyProfile')}><FaUserAlt size={20} /></Link>
         </div>
       </div>
-      <div className='flex px-8 items-center justify-between w-[360px]'>
+      <div className='flex px-8 items-center justify-between w-full max-w-sm'>
         <Link href='/CreatePosts' onClick={(e) => handleTransition(e, '/CreatePosts')}>
           {activeTab === "CreatePosts" ? (<IoCreate size={30} color='blue' />) : (<IoCreateOutline size={30} color='blue' />)}
         </Link>
