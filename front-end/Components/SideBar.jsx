@@ -30,7 +30,7 @@ const SideBar = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(`${port_uri}/app/user/user-info`, { headers })
+        const response = await axios.get(`${port_uri}app/user/user-info`, { headers })
         setProfilePic(response.data.userInfo.profilePic)
       } catch (error) {
         console.log(error)

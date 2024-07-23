@@ -40,7 +40,7 @@ const Contact = () => {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const response = await axios.get(`${port_uri}/app/user/user-info`, { headers });
+        const response = await axios.get(`${port_uri}app/user/user-info`, { headers });
         setCurrentUser(response.data.userInfo)
         setCurrentUserId(response.data.userInfo.id)
       } catch (error) {
@@ -51,7 +51,7 @@ const Contact = () => {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${port_uri}/app/user/all-users`, { headers });
+        const response = await axios.get(`${port_uri}app/user/all-users`, { headers });
         setUsers(response.data.users);
       } catch (error) {
         console.error('Error fetching users:', error.response?.data || error.message);
@@ -112,7 +112,7 @@ const Contact = () => {
 
   const fetchChatHistory = async () => {
     try {
-      const response = await axios.get(`${port_uri}/app/chat/history/${selectedUser._id}`, { headers });
+      const response = await axios.get(`${port_uri}app/chat/history/${selectedUser._id}`, { headers });
       setMessages(response.data);
     } catch (error) {
       console.error('Error fetching chat history:', error.response?.data || error.message);

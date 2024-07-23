@@ -54,7 +54,7 @@ const Nav = () => {
     const fetchSuggestion = async () => {
       if (query.length > 0) {
         try {
-          const response = await axios.get(`${port_uri}/app/user/search-users?query=${query}`, { headers });
+          const response = await axios.get(`${port_uri}app/user/search-users?query=${query}`, { headers });
           setSuggestion(response.data.suggestions);
         } catch (error) {
           console.error('Error fetching suggestions:', error);
@@ -70,7 +70,7 @@ const Nav = () => {
   const handleSuggestionClick = async (suggestion) => {
     try {
       console.log(suggestion)
-      const response = await axios.get(`${port_uri}/app/user/search-user-info?query=${suggestion}`, { headers });
+      const response = await axios.get(`${port_uri}app/user/search-user-info?query=${suggestion}`, { headers });
       setQuery('')
       router.push(`/otherUsers/${response.data.userInfo.id}`)
     } catch (error) {
