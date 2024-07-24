@@ -74,27 +74,27 @@ const SideBar = () => {
   }
 
   return (
-    <div className={`h-screen relative ${styles.navUI}`}>
+    <div className={`h-full relative ${styles.navUI}`}>
 
       <div className='flex flex-col justify-evenly h-4/6 border-b-2 border-black'>
         <Link href='/Posts' onClick={(e) => handleTransition(e, '/Posts')}>
           <div className={`mx-5 flex gap-2 items-end justify-start ${styles.sidebar_btn} ${activeTab === "Posts" ? styles.sidebar_btn_active : ''}`}>
             <Image src={Home} alt='Home' className='w-12 h-12' />
-            <p className='mb-[1px]'>Feed</p>
+            <p className='mb-1'>Feed</p>
           </div>
         </Link>
 
         <Link href='/CreatePosts' onClick={(e) => handleTransition(e, '/CreatePosts')}>
           <div className={`mx-5 flex gap-2 items-end justify-start ${styles.sidebar_btn} ${activeTab === "CreatePosts" ? styles.sidebar_btn_active : ''}`}>
             <Image src={Create} alt='Create' className='w-12 h-12' />
-            <p className='mb-[1px]'>Create</p>
+            <p className='mb-1'>Create</p>
           </div>
         </Link>
 
         <Link href='/MessageBox' onClick={(e) => handleTransition(e, '/MessageBox')}>
           <div className={`mx-5 flex gap-2 items-end justify-start ${styles.sidebar_btn} ${activeTab === "MessageBox" ? styles.sidebar_btn_active : ''}`}>
             <Image src={Message} alt='Message' className='w-12 h-12' />
-            <p className='mb-[1px]'>Message</p>
+            <p className='mb-1'>Message</p>
           </div>
         </Link>
       </div>
@@ -103,7 +103,7 @@ const SideBar = () => {
         <Link href='/MyProfile' onClick={(e) => handleTransition(e, '/MyProfile')}>
           <div className='relative'>
             <img src={profilePic} alt='' className='w-12 h-12 rounded-full'/>
-            <div className='absolute z-10 bottom-[1px] right-[1px]'>
+            <div className='absolute z-10 bottom-1 right-1'>
               <IoIosArrowDropdownCircle color='white' size={15} />
             </div>
           </div>
