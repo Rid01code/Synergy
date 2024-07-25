@@ -14,7 +14,7 @@ const Contact = () => {
 
   const port_uri = process.env.PORT_URL
   
-  const socket = 'http://localhost:5000'
+  const socket = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000'
 
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
@@ -62,12 +62,12 @@ const Contact = () => {
     fetchUsers();
 
     socketRef.current = io(socket, {
-      transports: ['websocket', 'polling'],
+      transports: ['websocket'],
       withCredentials: true,
       upgrade: false,
       forceNew: true,
       reconnection: true,
-      timeout: 20000,
+      timeout: 60000,
       secure: true,
     })
 

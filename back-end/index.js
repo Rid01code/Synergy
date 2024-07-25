@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const http = require('http')
+const path = require('path')
 const socketIo = require('socket.io')
 require('./Connection/conn')
 const usersApi = require('./Routes/users')
@@ -13,7 +13,6 @@ const port = process.env.PORT || 5000
 
 app.use(cors());
 
-
 app.use('/app/user', usersApi)
 app.use('/app/post', postApi)
 app.use('/app/chat', chatApi)
@@ -22,7 +21,11 @@ app.get('/' , (req, res) => {
   res.send('Hello World!')
 })
 
-// const server = http.createServer(app)
+app.use(express.static(path.join(__dirname, '../front-end/.next')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname , '../front-end/.next' , 'index.html'))
+})
 
 const server = app.listen(port,() => {
   console.log(`Listening on port ${port}`)
@@ -30,8 +33,9 @@ const server = app.listen(port,() => {
 
 const io = socketIo(server, {
   cors: {
-    origin: "*", // Replace with your frontend URL
+    origin: "http://localhost:3000", // Replace with your frontend URL
     methods: ["GET", "POST"],
+    credentials: true
   }
 })
 

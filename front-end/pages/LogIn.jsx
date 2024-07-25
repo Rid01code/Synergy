@@ -10,7 +10,7 @@ import { useStore, useSelector } from 'react-redux';
 
 const LogIn = () => {
 
-  const port_uri = process.env.PORT_URL
+  const port_uri = (process.env.PORT_URL)
 
   const store = useStore()
 

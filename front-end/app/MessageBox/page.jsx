@@ -11,7 +11,7 @@ const ChatPage = () => {
 
   const port_uri = process.env.PORT_URL
 
-  const socket = 'http://localhost:5000'
+  const socket = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000'
 
 
   const [users, setUsers] = useState([]);
@@ -143,7 +143,7 @@ const ChatPage = () => {
     const fetchChatHistoryForAllUsers = async () => {
       if (!users || !currentUser) return;
       const promises = users.filter(user => user._id !== currentUserId).map(user => {
-        return axios.get(`${port_uri}/app/chat/history/${user._id}`, { headers });
+        return axios.get(`${port_uri}app/chat/history/${user._id}`, { headers });
       });
       try {
         const responses = await Promise.all(promises);
