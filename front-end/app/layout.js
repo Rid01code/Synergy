@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
               <SideBar />
             </div>
             <div className={`w-full lg:col-start-2 lg:col-span-2 lg:h-screen lg:overflow-y-auto ${styles.scrollbar_hide}`}>
-              <div>{children}</div>
+              <Client>{children}</Client>
             </div>
             <div className="hidden lg:block lg:fixed lg:right-0 lg:top-30 lg:h-5/6 lg:w-60">
               <Contact />

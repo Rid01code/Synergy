@@ -117,7 +117,7 @@ const page = ({closeButton}) => {
         <div className='flex flex-col mb-8'>
           <label htmlFor='image' className='text-xl'>Image</label>
           <div className='flex justify-center items-center'>
-            <label htmlFor='file' className='flex justify-center items-center bg-slate-600 border-2 rounded-lg w-1/2 h-72 relative hover:border-black overflow-hidden'>
+            <label htmlFor='file' className='flex justify-center items-center bg-slate-600 border-2 rounded-lg w-4/5 lg:w-1/2 h-72 relative hover:border-black overflow-hidden'>
               <FaFileUpload
                 size={30}
                 className='absolute'
