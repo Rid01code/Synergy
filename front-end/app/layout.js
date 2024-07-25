@@ -4,9 +4,12 @@ import "../styles/globals.css";
 import Nav from "@/Components/Nav";
 import SideBar from "@/Components/SideBar";
 import Contact from "@/Components/Contact";
+import Posts from "./Posts/page.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../styles/allcss.module.css"
+import { Client } from "@/utils/Client";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -36,10 +39,10 @@ export default function RootLayout({ children }) {
               <SideBar />
             </div>
             <div className={`w-full lg:col-start-2 lg:col-span-2 lg:h-screen lg:overflow-y-auto ${styles.scrollbar_hide}`}>
-              {children}
+              <div>{children}</div>
             </div>
             <div className="hidden lg:block lg:fixed lg:right-0 lg:top-30 lg:h-5/6 lg:w-60">
-              <Contact/>
+              <Contact />
             </div>
           </div>
         </body>

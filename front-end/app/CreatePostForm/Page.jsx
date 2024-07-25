@@ -88,8 +88,8 @@ const page = ({closeButton}) => {
   }
 
   return (
-    <div className='h-4/ w-full flex justify-center items-center z-20'>
-      <form className='px-8 py-4 border-2 border-black rounded-lg lg:w-1/2 md:w-1/2 sm:w-4/5 xs:w-4/5 items-center relative z-20' onSubmit={submitHandler}>
+    
+      <form className='w-96 px-8 py-4 border-2 border-black rounded-lg lg:w-full md:w-1/2 sm:w-4/5 xs:w-4/5 items-center relative z-20' onSubmit={submitHandler}>
         <div className='w-full flex items-center justify-center'><h1 className='text-center text-2xl font-bold text-blue-500'>Create Post</h1></div>
         <button className='bg-red-500 absolute top-1 right-1 font-semibold text-white w-6 h-6 hover:bg-red-700' onClick={closeButton}>X</button>
         <div className='flex flex-col'>
@@ -117,14 +117,20 @@ const page = ({closeButton}) => {
         <div className='flex flex-col mb-8'>
           <label htmlFor='image' className='text-xl'>Image</label>
           <div className='flex justify-center items-center'>
-            <label htmlFor='file' className='flex justify-center items-center bg-slate-600 border-2 rounded-lg w-10/12 h-72 relative hover:border-black'>
+            <label htmlFor='file' className='flex justify-center items-center bg-slate-600 border-2 rounded-lg w-1/2 h-72 relative hover:border-black overflow-hidden'>
               <FaFileUpload
                 size={30}
                 className='absolute'
               />
               {image && (
                 <div className='z-10'>
-                  <Image src={URL.createObjectURL(image)} alt='preview' width={400} height={400} />
+                <Image
+                  src={URL.createObjectURL(image)}
+                  alt='preview'
+                  width={400}
+                  height={400}
+                  className='object-cover h-full w-full'
+                />
                 </div>
               )}
               <ImCross
@@ -144,7 +150,7 @@ const page = ({closeButton}) => {
         </div>
         <button className='bg-blue-700 py-2 px-6 border-2 border-blue-700 rounded-lg text-white'>POST</button>
       </form>
-    </div>
+    
   )
 }
 

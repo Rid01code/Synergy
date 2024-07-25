@@ -26,13 +26,16 @@ const Nav = () => {
   const router = useRouter()
   
   const [isFocused, setIsFocused] = useState(false);
-  const [hasValue, setHasValue] = useState(false);
+
   const [activeTab, setActiveTab] = useState('Posts')
 
   const [query, setQuery] = useState('')
+
   const [suggestion, setSuggestion] = useState([]);
 
-  const [userId , setUserId] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
+
+  // const [userId , setUserId] = useState('')
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
@@ -68,6 +71,7 @@ const Nav = () => {
   }, [query]);
 
   const handleSuggestionClick = async (suggestion) => {
+    setIsLoading(true)
     try {
       console.log(suggestion)
       const response = await axios.get(`${port_uri}app/user/search-user-info?query=${suggestion}`, { headers });
@@ -75,12 +79,20 @@ const Nav = () => {
       router.push(`/otherUsers/${response.data.userInfo.id}`)
     } catch (error) {
       console.log(error)
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false)
+      },2000)
     }
   }
 
   const handleKeyDown = (e, index) => {
     if (e.key === 'Enter') {
+      setIsLoading(true)
       handleSuggestionClick(suggestion[0]);
+      setTimeout(() => {
+        setIsLoading(false)
+      },2000)
     }
   }
 
@@ -118,6 +130,15 @@ const Nav = () => {
     }, 300);
   }
 
+  //Add loader
+  if (isLoading) {
+    return (
+      <div className='h-screen flex items-center justify-center'>
+        <div className={`${styles.loader}`}></div>;
+      </div>
+    );
+  }
+
   return (
     <div className={`flex flex-col items-center justify-between px-5 w-full ${styles.navUI}`}>
       <div className='flex items-center justify-between px-1 py-2 w-full'>
@@ -133,11 +154,7 @@ const Nav = () => {
               onKeyDown={(e) => handleKeyDown(e)}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className={`w-10 h-10 rounded-lg border-none outline-none py-4 px-4 bg-transparent cursor-pointer transition-all duration-500 ease-in-out
-              placeholder:text-transparent
-              focus:bg-slate-200 focus:border focus:border-purple-600 focus:w-56 focus:cursor-default focus:pl-12
-              ${(isFocused || hasValue) ? 'bg-white border border-purple-600 w-56 cursor-default pl-12' : ''}
-              focus:placeholder:text-gray-700`}
+              className={`${styles.input}`}
             />
             {
               suggestion.length > 0 && (
@@ -158,9 +175,7 @@ const Nav = () => {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              className={`absolute left-0 top-0 h-10 w-10 bg-white rounded-lg transition-all duration-200 ease-in-out fill-purple-600 border border-purple-600
-              ${(isFocused || hasValue) ? 'z-0 bg-transparent border-none' : '-z-10'}
-              group-hover:rotate-360`}
+              className={`${styles.icon}`}
             >
               <g strokeWidth="0" id="SVGRepo_bgCarrier"></g>
               <g strokeLinejoin="round" strokeLinecap="round" id="SVGRepo_tracerCarrier"></g>
@@ -175,7 +190,7 @@ const Nav = () => {
           <Link href='/MyProfile' onClick={(e)=>handleTransition(e , '/MyProfile')}><FaUserAlt size={20} /></Link>
         </div>
       </div>
-      <div className='flex px-8 items-center justify-between w-full max-w-sm'>
+      <div className={`flex px-8 items-center justify-between ${styles.nav_icon_box}`}>
         <Link href='/CreatePosts' onClick={(e) => handleTransition(e, '/CreatePosts')}>
           {activeTab === "CreatePosts" ? (<IoCreate size={30} color='blue' />) : (<IoCreateOutline size={30} color='blue' />)}
         </Link>
