@@ -160,7 +160,7 @@ const Contact = () => {
             {users.filter(user => user._id !== currentUserId).map(user => (
               <li
                 key={user._id}
-                className={`flex items-center p-2 my-4 hover:bg-gray-100 cursor-pointer ${selectedUser?._id === user._id ? 'bg-gray-200' : ''}`}
+                className={`flex items-center p-2 ${styles.contact_list} hover:bg-gray-100 cursor-pointer ${selectedUser?._id === user._id ? 'bg-gray-200' : ''}`}
                 onClick={() => setSelectedUser(user)}
               >
                 {user.profilePic ? (

@@ -1,3 +1,4 @@
+/* css for styling LogIn SignIn */
 .title::before,.title::after {
   position: absolute;
   content: "";
@@ -20,11 +21,15 @@
   height: 18px;
   animation: pulse 1s linear infinite;
 }
+
+/* css for otp page */
 .OtpPage{
   position: fixed;
   top: 35%;
   margin-left:55px
 }
+
+/* some css for nav bar */
 .navUI{
   border-radius: 5px;
   background: #ffffff;
@@ -93,12 +98,22 @@
   width: 100%
 }
 
+
+/* some css for post box */
 .postBox{
   border-radius: 10px;
   background: #f5f5f5;
   box-shadow:  20px 20px 60px #d0d0d0,
               -20px -20px 60px #ffffff;
 }
+
+.postBox_forText{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* css for transition */
 .page-transition{
   opacity: 0;
   background: black;
@@ -106,6 +121,7 @@
   filter: blur(1px);
 }
 
+/* css for loader */
 .loader {
   width: 48px;
   height: 48px;
@@ -144,6 +160,8 @@
   box-shadow: 0 0 5px rgba(8, 198, 223, 0.15);
 }
 
+
+/* some css for sidebar */
 .sidebar{
   height: 70%;
   display: flex;
@@ -201,6 +219,11 @@
 
   .sidebar_profile_btn{
     height: 140px;
+  }
+
+  /* some css for contact */
+  .contact_list{
+    margin: 16px 0px;
   }
 
 @keyframes pulse {

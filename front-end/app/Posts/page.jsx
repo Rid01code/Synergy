@@ -48,7 +48,7 @@ function posts() {
 
   const [postComment, setPostComment] = useState({});
 
-  const [AddComment, setAddComment] = useState();
+  const [AddComment, setAddComment] = useState(' ');
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -158,7 +158,7 @@ function posts() {
     try {
       const response = await axios.put(`${port_uri}app/post/add-comments/${post._id}`, { comment: AddComment }, { headers });
 
-      const currentUserResponse = await axios.get('${port_uri}app/user/user-info', { headers });
+      const currentUserResponse = await axios.get(`${port_uri}app/user/user-info`, { headers });
       const currentUserName = currentUserResponse.data.userInfo.name;
       setPostComment((prevPostComment) => ({
         ...prevPostComment,
@@ -233,10 +233,6 @@ function posts() {
     event.preventDefault();
     const textContent = postContent.current.value
     const theme = backgroundColor.current.value
-
-    console.log(textContent)
-    console.log(theme)
-
     try {
       const response = await axios.post(`${port_uri}app/post/upload-post`, {
         textContent: textContent,
@@ -244,8 +240,7 @@ function posts() {
       }, { headers })
       
       postContent.current.value = ''
-      backgroundColor.current.value = '#ffffff'
-      console.log(response)
+      postContent.current.style.background = '#ffffff'  
       fetchPosts()
       toast.success("Post created successfully")
     } catch (error) {
@@ -337,7 +332,7 @@ function posts() {
                   src={post.profilePic}
                   alt={post.name} className='w-10 h-10 object-cover rounded-full'
                   onClick={() => handleProfileClick(post)} />)
-                :
+                :post.profilePic = ' '
                 (<FaUserCircle
                   size={30}
                   onClick={() => handleProfileClick(post)} />)}
@@ -367,7 +362,7 @@ function posts() {
               (<img src={post.photoUrl} alt={post.title} className='w-80 h-80 object-cover rounded-md ml-10' />)
               :
               (<div
-                className='flex justify-center items-center w-80 h-80 object-cover rounded-md ml-10 text-white text-lg font-semibold'
+                className={`${styles.postBox_forText} w-80 h-80 object-cover rounded-md ml-10 text-white text-lg font-semibold`}
                 style={{ backgroundColor: post.theme }}
               >
                 {post.textContent}
