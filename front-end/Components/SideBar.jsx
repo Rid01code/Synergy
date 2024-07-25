@@ -76,7 +76,7 @@ const SideBar = () => {
   return (
     <div className={`h-full relative ${styles.navUI}`}>
 
-      <div className='flex flex-col justify-evenly h-4/6 border-b-2 border-black'>
+      <div className='flex flex-col flex-wrap justify-evenly h-4/6 border-b-2 border-black'>
         <Link href='/Posts' onClick={(e) => handleTransition(e, '/Posts')}>
           <div className={`mx-5 flex gap-2 items-end justify-start ${styles.sidebar_btn} ${activeTab === "Posts" ? styles.sidebar_btn_active : ''}`}>
             <Image src={Home} alt='Home' className='w-12 h-12' />
