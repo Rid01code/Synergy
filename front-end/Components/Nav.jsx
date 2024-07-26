@@ -158,7 +158,7 @@ const Nav = () => {
             />
             {
               suggestion.length > 0 && (
-                <ul className='bg-gray-300 absolute top-12 right-12 rounded-md'>
+                <ul className='bg-gray-300 absolute top-16 right-20 rounded-md'>
                   <div onClick={clearInput} className='m-2 cursor-pointer'><IoMdArrowRoundBack size={20}/></div>
                   {suggestion.map((suggestion, index) => (
                     <li

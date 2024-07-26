@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const router = express.Router()
 const userModel = require('../Models/userModel')
+const PostModel = require('../Models/postModel')
 const nodemailer = require('nodemailer')
 const { validateEmail, validatePhone } = require('../utilities/validation')
 const generateOtp = require('../utilities/generateOTP')
@@ -13,8 +14,6 @@ router.use(express.json())
 
 const MY_EMAIL = process.env.MY_EMAIL
 const MY_EMAIL_PASSWORD = process.env.MY_EMAIL_PASSWORD
-
-console.log(MY_EMAIL , MY_EMAIL_PASSWORD)
 
 let otpStore={}
 const transporter = nodemailer.createTransport({
@@ -141,6 +140,7 @@ router.put('/update-profile', authenticateToken, async (req, res) => {
 
     if (profilePic) {
       user.profilePic = profilePic;
+      await PostModel.updateMany({userId}), {$set:{profilePic}}
     }
 
     if (bio) {
@@ -148,6 +148,7 @@ router.put('/update-profile', authenticateToken, async (req, res) => {
     }
 
     await user.save();
+
 
     return res.status(200).json({ message: "Profile Updated Successfully" })
   } catch (error) {

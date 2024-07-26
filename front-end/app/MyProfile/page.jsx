@@ -7,6 +7,8 @@ import { LuUserCircle2 } from "react-icons/lu";
 import { FaRightFromBracket } from "react-icons/fa6";
 import { useStore } from 'react-redux';
 import { authActions } from '@/Store/Auth';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import styles from "../../styles/allcss.module.css"
 
 const page = () => {
@@ -23,6 +25,11 @@ const page = () => {
   const [profilePicture, setProfilePicture] = useState()
   const [isBioEditable, setIsBioEditable] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [crop, setCrop] = useState({ unit: '%', x: 0, y: 0, width: 50, height: 50, aspect: 1 });
+  const [completedCrop, setCompletedCrop] = useState(null);
+  const [isCropping, setIsCropping] = useState(false);
+  const imgRef = useRef(null);
+  const [croppedImagePreview, setCroppedImagePreview] = useState(null);
 
 
   let id = null
@@ -36,60 +43,125 @@ const page = () => {
     authorization: `Bearer ${token}`
   }
 
-  const handelImage = (e) => {
-    setProfilePicture(e.target.files[0])
-  }
+const getCroppedImg = (image, crop) => {
+  return new Promise((resolve, reject) => {
+    if (!image || !image.complete) {
+      reject(new Error('Image not loaded'));
+      return;
+    }
 
-  const updateProfile = async (event) => {
-    event.preventDefault()
-    console.log(bio)
-    try {
-      if (profilePicture) {
-        const formData = new FormData()
-        formData.append('file', profilePicture)
-        formData.append('upload_preset', 'Synergy')
-        
-        const res = await fetch(
-          'https://api.cloudinary.com/v1_1/ddysc3tge/image/upload', {
+    const canvas = document.createElement('canvas');
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    const ctx = canvas.getContext('2d');
+
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
+
+    canvas.toBlob(blob => {
+      if (!blob) {
+        reject(new Error('Canvas is empty'));
+        return;
+      }
+      blob.name = 'cropped.jpeg';
+      resolve(blob);
+    }, 'image/jpeg');
+  });
+}
+
+const handleImage = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    setProfilePicture(file);
+  } else {
+    setProfilePicture(null);
+  }
+};
+
+const updateProfile = async (event) => {
+  event.preventDefault();
+  console.log(bio);
+  try {
+    if (profilePicture) {
+      const formData = new FormData();
+      
+      // Use the cropped image if available, otherwise use the original
+      const imageToUpload = croppedImagePreview ? await fetch(croppedImagePreview).then(r => r.blob()) : profilePicture;
+      formData.append('file', imageToUpload);
+      formData.append('upload_preset', 'Synergy');
+      
+      const res = await fetch(
+        'https://api.cloudinary.com/v1_1/ddysc3tge/image/upload',
+        {
           method: 'post',
           body: formData
         }
-        )
-        if (!res) {
-          toast.error("Error while getting Photo URL")
-        }
-
-        const data = await res.json()
-        const imageUrl = data.secure_url;
-
-        const response = await axios.put(`${port_uri}app/user/update-profile`, {
-          profilePic: imageUrl,
-        }, { headers })
-        
-        setUserPic(profilePicture)
-        toast.success(response.data.message)
-
-        setProfilePicture('')
-        setBio('')
+      );
+      if (!res.ok) {
+        toast.error("Error while getting Photo URL");
+        return;
       }
-
-      if (bio) {
-        const response = await axios.put(`${port_uri}app/user/update-profile`, {
-          bio: bio
-        }, { headers })
-        setIsBioEditable(false)
-        setUserBio(bio)
-        setBio('')
-      }
-
-    } catch (error) {
-      console.log(error)
-      if (error.response) {
-        toast.error(error.response.data.message)
-      } else {
-        toast.error('Error occurred while sending request')
-      }
+      const data = await res.json();
+      const imageUrl = data.secure_url;
+      
+      const response = await axios.put(`${port_uri}app/user/update-profile`, {
+        profilePic: imageUrl,
+      }, { headers });
+      
+      setUserPic(imageUrl);
+      toast.success(response.data.message);
+      setProfilePicture('');
+      setCroppedImagePreview(null);
     }
+    
+    if (bio) {
+      const response = await axios.put(`${port_uri}app/user/update-profile`, {
+        bio: bio
+      }, { headers });
+      setIsBioEditable(false);
+      setUserBio(bio);
+      setBio('');
+    }
+  } catch (error) {
+    console.log(error);
+    if (error.response) {
+      toast.error(error.response.data.message);
+    } else {
+      toast.error('Error occurred while sending request');
+    }
+  }
+};
+
+  const previewCroppedImage = async () => {
+  try {
+    if (profilePicture && completedCrop) {
+      const croppedImageBlob = await getCroppedImg(imgRef.current, completedCrop);
+      const croppedImagePreviewUrl = URL.createObjectURL(croppedImageBlob);
+      setCroppedImagePreview(croppedImagePreviewUrl);
+      setIsCropping(false)
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  };
+  
+  const cancel = () => {
+    setIsCropping(false);
+  }
+
+  const toggleCropping = () => {
+    setIsCropping(!isCropping);
   }
 
   useEffect(() => {
@@ -140,14 +212,68 @@ const page = () => {
               className='sr-only'
               type='file'
               id='image'
-              onChange={handelImage}
+              onChange={handleImage}
             />
-            {profilePicture && (<Image src={URL.createObjectURL(profilePicture)} alt='preview' width={200} height={200} className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10' />)}
+            {profilePicture && (
+              <img
+                src={URL.createObjectURL(profilePicture)}
+                alt='preview' width={200} height={200} 
+                className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10' />)}
+            
+            {croppedImagePreview && (
+              <img
+                src={croppedImagePreview}
+                alt='preview' width={200} height={200} 
+                className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10' />
+            )}
+
+            {profilePicture && isCropping && (
+              <div className={`w-80 h-96 flex flex-col items-center justify-between p-5 absolute top-0 right-[-64px] z-30 ${styles.navUI}`}>
+                <ReactCrop
+                  src={URL.createObjectURL(profilePicture)}
+                  crop={crop}
+                  onChange={(newCrop) => setCrop(newCrop)}
+                  onComplete={(c) => setCompletedCrop(c)}
+                  aspect={1}
+                >
+                  <img
+                    ref={imgRef}
+                    src={URL.createObjectURL(profilePicture)}
+                    alt="Crop me"
+                    className='w-80 h-72 '
+                  />
+                </ReactCrop>
+                <div className='flex justify-between gap-2'> 
+                  <button
+                    className='text-xs bg-slate-700 px-4 py-2 text-white border-2 border-slate-700 rounded-md'
+                    onClick={previewCroppedImage}>
+                    Preview
+                  </button>
+                  <button
+                    onClick={cancel}
+                    className='text-xs bg-red-700 px-4 py-2 text-white border-2 border-red-700 rounded-md'>
+                    Cancel
+                  </button>
+                </div>
+                </div>
+            )}
 
           </div>
           {
             profilePicture && (
-              <button onClick={updateProfile} className='bg-blue-700 px-4 py-2 text-white border-2 border-blue-700 rounded-md'>Upload Picture</button>
+              <div className='flex justify-between gap-2'>
+                <button
+                  onClick={updateProfile}
+                  className='bg-blue-700 px-4 py-2 text-white border-2 border-blue-700 rounded-md text-xs'
+                >
+                  Upload Picture
+                </button>
+                <button
+                  onClick={toggleCropping}
+                  className='bg-slate-700 px-4 py-2 text-white border-2 border-slate-700 rounded-md text-xs'>
+                  Crop Image
+                </button>
+              </div>  
             )
           }
         </div>
