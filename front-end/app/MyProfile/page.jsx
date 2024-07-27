@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios';
-import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { LuUserCircle2 } from "react-icons/lu";
 import { FaRightFromBracket } from "react-icons/fa6";
@@ -291,7 +290,7 @@ const updateProfile = async (event) => {
                 className='border-s-2 border-b-2 hover:outline-none hover:border-s-black hover:border-b-black focus:outline-none focus:border-s-blue-600 focus:border-b-blue-600'
               />
             ) : (
-              <p className='text-lg text-slate-800 font-semibold'>{userBio}</p>
+              <p className='font-serif text-lg text-slate-800 font-semibold'>{userBio}</p>
             )
           }
 
@@ -306,9 +305,9 @@ const updateProfile = async (event) => {
 
         <div className='flex flex-col items-center justify-center'>
           <h1 className='text-3xl font-extrabold mb-4 underline'>Contact Details</h1>
-          <div className='gap-4'><span className='text-xl text-slate-800 font-bold'>Email: </span><span className='text-xl font-bold text-slate-700'>{userEmail}</span></div>
-          <div className='gap-4'><span className='text-xl font-bold text-slate-800'>Number: </span><span className='text-xl font-bold
-          text-slate-700'>{userPhone}</span></div>
+          <div className='gap-4'><span className='text-xl text-slate-800 font-bold'>Email: </span><span className='font-mono font-bold text-blue-700'>{userEmail}</span></div>
+          <div className='gap-4'><span className='text-xl font-bold text-slate-800'>Number: </span><span className='font-mono font-bold
+          text-blue-700'>{userPhone}</span></div>
         </div>
 
         <div onClick={logout}>

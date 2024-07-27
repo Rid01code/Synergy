@@ -38,6 +38,19 @@ function posts() {
     }
   }, []);
 
+  axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Clear local storage and redirect to login
+      localStorage.removeItem('id');
+      localStorage.removeItem('token');
+      window.location.href = '/SignIn';
+    }
+    return Promise.reject(error);
+  }
+);
+
   const router = useRouter();
 
   const [allPost, setAllPost] = useState([{}]);
@@ -57,6 +70,7 @@ function posts() {
   const postContent = useRef(' ');
 
   const backgroundColor = useRef(' ')
+
 
 
 
@@ -87,7 +101,7 @@ function posts() {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [allPost.pro]);
 
 
   //Add Like
@@ -135,9 +149,7 @@ function posts() {
         console.log(error);
         if (error.response) {
           toast.error(error.response.data.message);
-        } else {
-          toast.error("Error occurred while sending request");
-        }
+        } 
       }
     };
     fetch();
@@ -202,9 +214,7 @@ function posts() {
         console.log(error);
         if (error.response) {
           toast.error(error.response.data.message);
-        } else {
-          toast.error("Error occurred while sending request");
-        }
+        } 
       }
     };
     fetch();

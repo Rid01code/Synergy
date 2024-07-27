@@ -20,8 +20,8 @@ const LogIn = () => {
       if (typeof window !== 'undefined') {
         window.location.href = '/Posts'
       }
-    }
-
+  }
+  
   const [showPassword, setShowPassword] = useState(false);
   const SignInEmailOrPhone = useRef()
   const SignInPassword = useRef()

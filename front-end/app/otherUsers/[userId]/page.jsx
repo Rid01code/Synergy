@@ -56,13 +56,13 @@ const page = () => {
         <h1 className='text-2xl font-bold'>{userName}</h1>
 
         <div className='flex flex-col items-center gap-1'>
-              <p className='text-lg font-semibold'>{userBio}</p>
+              <p className='font-serif text-lg font-semibold'>{userBio}</p>
         </div>
 
         <div className='flex flex-col items-center justify-center'>
           <h1 className='text-3xl font-extrabold mb-4 underline'>Contact Details</h1>
-          <div className='gap-4'><span className='text-xl font-bold'>Email: </span><span className='text-xl font-bold'>{userEmail}</span></div>
-          <div className='gap-4'><span className='text-xl font-bold'>Number: </span><span className='text-xl font-bold'>{userPhone}</span></div>
+          <div className='gap-4'><span className='text-xl font-bold'>Email: </span><span className='font-mono text-blue-600 font-bold'>{userEmail}</span></div>
+          <div className='gap-4'><span className='text-xl font-bold'>Number: </span><span className='font-mono text-blue-600 font-bold'>{userPhone}</span></div>
         </div>
       </div>
     </div>
