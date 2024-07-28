@@ -20,6 +20,7 @@ const page = () => {
   const [userEmail, setUserEmail] = useState()
   const [userPhone, setUserPhone] = useState()
   const [userBio, setUserBio] = useState(null)
+  const [userPosts, setUserPosts] = useState([])
   const [bio, setBio] = useState('')
   const [profilePicture, setProfilePicture] = useState()
   const [isBioEditable, setIsBioEditable] = useState(false);
@@ -29,6 +30,8 @@ const page = () => {
   const [isCropping, setIsCropping] = useState(false);
   const imgRef = useRef(null);
   const [croppedImagePreview, setCroppedImagePreview] = useState(null);
+  const [postComment, setPostComment] = useState({});
+  const [postLikes, setPostLikes] = useState({});
 
 
   let id = null
@@ -42,117 +45,117 @@ const page = () => {
     authorization: `Bearer ${token}`
   }
 
-const getCroppedImg = (image, crop) => {
-  return new Promise((resolve, reject) => {
-    if (!image || !image.complete) {
-      reject(new Error('Image not loaded'));
-      return;
-    }
-
-    const canvas = document.createElement('canvas');
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-    canvas.width = crop.width;
-    canvas.height = crop.height;
-    const ctx = canvas.getContext('2d');
-
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width,
-      crop.height
-    );
-
-    canvas.toBlob(blob => {
-      if (!blob) {
-        reject(new Error('Canvas is empty'));
+  const getCroppedImg = (image, crop) => {
+    return new Promise((resolve, reject) => {
+      if (!image || !image.complete) {
+        reject(new Error('Image not loaded'));
         return;
       }
-      blob.name = 'cropped.jpeg';
-      resolve(blob);
-    }, 'image/jpeg');
-  });
-}
 
-const handleImage = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    setProfilePicture(file);
-  } else {
-    setProfilePicture(null);
-  }
-};
+      const canvas = document.createElement('canvas');
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
+      canvas.width = crop.width;
+      canvas.height = crop.height;
+      const ctx = canvas.getContext('2d');
 
-const updateProfile = async (event) => {
-  event.preventDefault();
-  console.log(bio);
-  try {
-    if (profilePicture) {
-      const formData = new FormData();
-      
-      // Use the cropped image if available, otherwise use the original
-      const imageToUpload = croppedImagePreview ? await fetch(croppedImagePreview).then(r => r.blob()) : profilePicture;
-      formData.append('file', imageToUpload);
-      formData.append('upload_preset', 'Synergy');
-      
-      const res = await fetch(
-        'https://api.cloudinary.com/v1_1/ddysc3tge/image/upload',
-        {
-          method: 'post',
-          body: formData
-        }
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width,
+        crop.height
       );
-      if (!res.ok) {
-        toast.error("Error while getting Photo URL");
-        return;
-      }
-      const data = await res.json();
-      const imageUrl = data.secure_url;
-      
-      const response = await axios.put(`${port_uri}app/user/update-profile`, {
-        profilePic: imageUrl,
-      }, { headers });
-      
-      setUserPic(imageUrl);
-      toast.success(response.data.message);
-      setProfilePicture('');
-      setCroppedImagePreview(null);
-    }
-    
-    if (bio) {
-      const response = await axios.put(`${port_uri}app/user/update-profile`, {
-        bio: bio
-      }, { headers });
-      setIsBioEditable(false);
-      setUserBio(bio);
-      setBio('');
-    }
-  } catch (error) {
-    console.log(error);
-    if (error.response) {
-      toast.error(error.response.data.message);
-    } else {
-      toast.error('Error occurred while sending request');
-    }
+
+      canvas.toBlob(blob => {
+        if (!blob) {
+          reject(new Error('Canvas is empty'));
+          return;
+        }
+        blob.name = 'cropped.jpeg';
+        resolve(blob);
+      }, 'image/jpeg');
+    });
   }
-};
+
+  const handleImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setProfilePicture(file);
+    } else {
+      setProfilePicture(null);
+    }
+  };
+
+  const updateProfile = async (event) => {
+    event.preventDefault();
+    console.log(bio);
+    try {
+      if (profilePicture) {
+        const formData = new FormData();
+      
+        // Use the cropped image if available, otherwise use the original
+        const imageToUpload = croppedImagePreview ? await fetch(croppedImagePreview).then(r => r.blob()) : profilePicture;
+        formData.append('file', imageToUpload);
+        formData.append('upload_preset', 'Synergy');
+      
+        const res = await fetch(
+          'https://api.cloudinary.com/v1_1/ddysc3tge/image/upload',
+          {
+            method: 'post',
+            body: formData
+          }
+        );
+        if (!res.ok) {
+          toast.error("Error while getting Photo URL");
+          return;
+        }
+        const data = await res.json();
+        const imageUrl = data.secure_url;
+      
+        const response = await axios.put(`${port_uri}app/user/update-profile`, {
+          profilePic: imageUrl,
+        }, { headers });
+      
+        setUserPic(imageUrl);
+        toast.success(response.data.message);
+        setProfilePicture('');
+        setCroppedImagePreview(null);
+      }
+    
+      if (bio) {
+        const response = await axios.put(`${port_uri}app/user/update-profile`, {
+          bio: bio
+        }, { headers });
+        setIsBioEditable(false);
+        setUserBio(bio);
+        setBio('');
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Error occurred while sending request');
+      }
+    }
+  };
 
   const previewCroppedImage = async () => {
-  try {
-    if (profilePicture && completedCrop) {
-      const croppedImageBlob = await getCroppedImg(imgRef.current, completedCrop);
-      const croppedImagePreviewUrl = URL.createObjectURL(croppedImageBlob);
-      setCroppedImagePreview(croppedImagePreviewUrl);
-      setIsCropping(false)
+    try {
+      if (profilePicture && completedCrop) {
+        const croppedImageBlob = await getCroppedImg(imgRef.current, completedCrop);
+        const croppedImagePreviewUrl = URL.createObjectURL(croppedImageBlob);
+        setCroppedImagePreview(croppedImagePreviewUrl);
+        setIsCropping(false)
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
   };
   
   const cancel = () => {
@@ -173,6 +176,7 @@ const updateProfile = async (event) => {
         setUserEmail(response.data.userInfo.email)
         setUserPhone(response.data.userInfo.phone)
         setUserBio(response.data.userInfo.bio)
+        setUserPosts(response.data.userInfo.posts)
         setIsLoading(false)
       } catch (error) {
         console.log(error)
@@ -185,20 +189,135 @@ const updateProfile = async (event) => {
     setIsBioEditable(true);
   }
 
-  const logout = () => { 
+  const logout = () => {
     alert('Do You Want To Log Out')
     store.dispatch(authActions.logOut())
     localStorage.clear('id')
     localStorage.clear('token')
-    window.location.href= '/LogIn'
+    window.location.href = '/LogIn'
   }
+
+    //Add Like
+  const addLike = async (post) => {
+    try {
+      const response = await axios.put(`${port_uri}app/post/add-likes/${post._id}`, {}, { headers });
+
+      setPostLikes((prevPostLikes) => ({
+        ...prevPostLikes,
+        [post._id]: {
+          ...prevPostLikes[post._id],
+          likesCount: prevPostLikes[post._id].likesCount + 1,
+          hasLiked: true,
+        },
+      }));
+      toast.success(response.data.message);
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Error occurred while sending request");
+      }
+    }
+  };
+
+    //Get all likes
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get(`${port_uri}app/post/get-post`, { headers });
+        const posts = response.data.posts;
+        const postLikesObj = {};
+        await Promise.all(posts.map(async (post) => {
+          const likesResponse = await axios.get(`${port_uri}app/post/get-likes/${post._id}`, { headers });
+          postLikesObj[post._id] = {
+            likesCount: likesResponse.data.likesCount,
+            usersWhoLike: likesResponse.data.usersWhoLike,
+            hasLiked: likesResponse.data.hasLiked,
+          };
+        }));
+        setPostLikes(postLikesObj);
+      } catch (error) {
+        console.log(error);
+        if (error.response) {
+          toast.error(error.response.data.message);
+        } 
+      }
+    };
+    fetch();
+  }, []);
+
+
+  //Open comment Input
+  const doComment = (postId) => {
+    setOpenCommentInput((prevOpenCommentInput) => ({
+      ...prevOpenCommentInput,
+      [postId]: !prevOpenCommentInput[postId],
+    }));
+  };
+
+
+  //Add comment
+  const addComments = async (post) => {
+    try {
+      const response = await axios.put(`${port_uri}app/post/add-comments/${post._id}`, { comment: AddComment }, { headers });
+
+      const currentUserResponse = await axios.get(`${port_uri}app/user/user-info`, { headers });
+      const currentUserName = currentUserResponse.data.userInfo.name;
+      setPostComment((prevPostComment) => ({
+        ...prevPostComment,
+        [post._id]: {
+          ...prevPostComment[post._id],
+          commentsCount: prevPostComment[post._id].commentsCount + 1,
+          usersWhoComment: [...prevPostComment[post._id].usersWhoComment, { userId: { name: currentUserName }, comment: AddComment }],
+        },
+      }));
+
+      toast.success(response.data.message);
+      setAddComment("");
+      setOpenCommentInput(false);
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Error occurred while sending request");
+      }
+    }
+  };
+
+
+  //Get comment
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get(`${port_uri}app/post/get-post`, { headers });
+        const posts = response.data.posts;
+        const postCommentsObj = {};
+        await Promise.all(posts.map(async (post) => {
+          const commentsResponse = await axios.get(`${port_uri}app/post/get-comments/${post._id}`, { headers });
+          postCommentsObj[post._id] = {
+            commentsCount: commentsResponse.data.numberOfComments,
+            usersWhoComment: commentsResponse.data.comments,
+          };
+        }));
+        setPostComment(postCommentsObj);
+      } catch (error) {
+        console.log(error);
+        if (error.response) {
+          toast.error(error.response.data.message);
+        } 
+      }
+    };
+    fetch();
+  }, []);
 
   if (isLoading) {
     return (
       <div className='h-screen flex items-center justify-center'>
         <div className={`${styles.loader}`}></div>;
       </div>
-    ) 
+    )
   }
 
   return (
@@ -216,13 +335,13 @@ const updateProfile = async (event) => {
             {profilePicture && (
               <img
                 src={URL.createObjectURL(profilePicture)}
-                alt='preview' width={200} height={200} 
+                alt='preview' width={200} height={200}
                 className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10' />)}
             
             {croppedImagePreview && (
               <img
                 src={croppedImagePreview}
-                alt='preview' width={200} height={200} 
+                alt='preview' width={200} height={200}
                 className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10' />
             )}
 
@@ -242,7 +361,7 @@ const updateProfile = async (event) => {
                     className='w-80 h-72 '
                   />
                 </ReactCrop>
-                <div className='flex justify-between gap-2'> 
+                <div className='flex justify-between gap-2'>
                   <button
                     className='text-xs bg-slate-700 px-4 py-2 text-white border-2 border-slate-700 rounded-md'
                     onClick={previewCroppedImage}>
@@ -254,7 +373,7 @@ const updateProfile = async (event) => {
                     Cancel
                   </button>
                 </div>
-                </div>
+              </div>
             )}
 
           </div>
@@ -272,7 +391,7 @@ const updateProfile = async (event) => {
                   className='bg-slate-700 px-4 py-2 text-white border-2 border-slate-700 rounded-md text-xs'>
                   Crop Image
                 </button>
-              </div>  
+              </div>
             )
           }
         </div>
@@ -315,6 +434,98 @@ const updateProfile = async (event) => {
         </div>
         
       </div>
+
+      {userPosts.map((post, index) => (
+        <div
+          key={index}
+          className={`my-6 p-6 relative ${styles.postBox}`}>
+          <div className='flex items-end gap-1'>
+            {post.profilePic ?
+              (<img
+                src={post.profilePic}
+                alt={post.name} className='w-10 h-10 object-cover rounded-full'/>)
+              : post.profilePic = ' '
+                (<FaUserCircle
+                  size={30} />)}
+            <div className='text-xl'>
+              {post.name}
+            </div>
+          </div>
+
+          <div className='ml-10 text-xs font-light'>
+            {moment(post.date).format('MMMM Do, YYYY')}
+          </div>
+
+          {post.title && (
+            <div
+              className='ml-10'>
+              {post.title}
+            </div>)}
+            
+          <div>{
+            post.hashtags && post.hashtags.map((tag, index) => (
+              <p key={index} className='ml-10 text-blue-600'>{` #${tag} `}</p>
+            ))}
+          </div>
+
+          {post.photoUrl ?
+            (<img src={post.photoUrl} alt={post.title} className='w-80 h-80 object-cover rounded-md ml-10' />)
+            :
+            (<div
+              className={`${styles.postBox_forText} w-80 h-80 object-cover rounded-md ml-10 text-white text-lg font-semibold`}
+              style={{ backgroundColor: post.theme }}
+            >
+              {post.textContent}
+            </div>)}
+
+          <div className='flex justify-between items-center ml-10 mt-8 px-5 border-t-2'>
+            <div className='flex gap-2 items-start'>
+              <p className='font-semibold text-xl mt-[1px]'>{postLikes[post._id] ? postLikes[post._id].likesCount : 0}</p>
+              {postLikes[post._id] && postLikes[post._id].hasLiked ? (
+                <FaThumbsUp size={20} color='blue' />
+              ) : (
+                <FaRegThumbsUp size={20} color='blue' onClick={() => addLike(post)} />
+              )}
+              <details className='text-blue-600 text-xl'>
+                <summary></summary>
+                <div className='absolute left-[12px] bg-slate-400 p-4 rounded-lg z-10'>
+                  {postLikes[post._id] && postLikes[post._id].usersWhoLike.map((users, index) => (
+                    <p key={index}>{users.userId.name} </p>
+                  ))}
+                </div>
+              </details>
+            </div>
+            <div className='flex items-start gap-2'>
+              <div className='font-semibold text-xl'>{postComment[post._id] ? postComment[post._id].commentsCount : 0}</div>
+              <FaRegComment size={20} color='blue' className='mt-[1px]' onClick={() => doComment(post._id)} />
+              <details className='text-blue-600 text-xl '>
+                <summary> </summary>
+                <div className='absolute right-[12px] bg-slate-400 p-4 rounded-lg z-10'>
+                  {postComment[post._id] && postComment[post._id].usersWhoComment.map((comment, index) => (
+                    <div key={index}>
+                      <p className='font-semibold text-blue-500 text-lg'>{comment.userId.name}</p>
+                      <p className='ml-6 text-black font-xs'>{comment.comment}</p>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            </div>
+          </div>
+
+          {openCommentInput[post._id] && (
+
+            <div className='flex items-center justify-end mt-4'>
+              <input
+                type="text"
+                className='border-l-2 border-l-blue-600 border-b-2 border-b-blue-600 focus:outline-none focus:border-l-blue-800 focus:border-b-blue-800'
+                placeholder="Add a comment..."
+                value={AddComment}
+                onChange={(e) => { setAddComment(e.target.value); }} />
+              <button className='ml-2' onClick={() => addComments(post)}><IoMdSend size={20} /></button>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   )
 }

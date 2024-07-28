@@ -161,6 +161,7 @@ router.get('/user-info',authenticateToken ,  async (req, res) => {
   try {
     const userId = req.headers.id
     const user = await userModel.findById(userId)
+    const posts = await PostModel.find({ userId: { $eq:  user._id } });
     if (!user) {
       return res.status(400).json({ message: "User Not Found" })
     }
@@ -170,7 +171,8 @@ router.get('/user-info',authenticateToken ,  async (req, res) => {
       name: user.name,
       bio: user.bio,
       email : user.email,
-      phone : user.phone
+      phone: user.phone,
+      posts: posts
     }
     return res.status(200).json({userInfo})
   } catch (error) {
@@ -187,7 +189,8 @@ router.get('/user-info-byId/:userId', authenticateToken, async (req, res) => {
   }
   try {
     const user = await userModel.findById(userId)
-    return res.status(200).json({user})
+    const posts = await PostModel.find({ userId: { $eq:  userId } });
+    return res.status(200).json({user , posts})
   } catch (error) {
     console.log(error)
     return res.status(200).json({message : "Internal Server Error"})
