@@ -140,7 +140,7 @@ router.put('/update-profile', authenticateToken, async (req, res) => {
 
     if (profilePic) {
       user.profilePic = profilePic;
-      await PostModel.updateMany({userId}), {$set:{profilePic}}
+      await PostModel.updateMany({ userId: userId }, { $set: { profilePic: profilePic } })
     }
 
     if (bio) {
@@ -148,7 +148,6 @@ router.put('/update-profile', authenticateToken, async (req, res) => {
     }
 
     await user.save();
-
 
     return res.status(200).json({ message: "Profile Updated Successfully" })
   } catch (error) {
