@@ -7,8 +7,14 @@ import { FaRightFromBracket } from "react-icons/fa6";
 import { useStore } from 'react-redux';
 import { authActions } from '@/Store/Auth';
 import ReactCrop from 'react-image-crop';
+import moment from 'moment';
 import 'react-image-crop/dist/ReactCrop.css';
 import styles from "../../styles/allcss.module.css"
+import { FaUserCircle } from "react-icons/fa";
+import { FaRegThumbsUp } from "react-icons/fa";
+import { FaRegComment } from "react-icons/fa";
+import { FaThumbsUp } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
 
 const page = () => {
 
@@ -32,6 +38,7 @@ const page = () => {
   const [croppedImagePreview, setCroppedImagePreview] = useState(null);
   const [postComment, setPostComment] = useState({});
   const [postLikes, setPostLikes] = useState({});
+  const [openCommentInput, setOpenCommentInput] = useState({});
 
 
   let id = null
@@ -320,8 +327,12 @@ const page = () => {
     )
   }
 
+  const deletePost = () => {
+    
+  }
+
   return (
-    <div className='h-screen flex justify-center items-center'>
+    <div className='my-5 flex flex-col items-center'>
       <div className='rounded-[50px] bg-[#f5f5f5] shadow-[20px_20px_60px_#d0d0d0,_-20px_-20px_60px_#ffffff] p-8 flex flex-col items-center justify-center gap-2'>
         <div className='flex flex-col justify-center items-center'>
           <div className='relative'>
