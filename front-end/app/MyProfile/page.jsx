@@ -15,6 +15,9 @@ import { FaRegThumbsUp } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
+import { IoTrashBinOutline } from "react-icons/io5";
+import { IoTrashBin } from "react-icons/io5";
+
 
 const page = () => {
 
@@ -39,6 +42,8 @@ const page = () => {
   const [postComment, setPostComment] = useState({});
   const [postLikes, setPostLikes] = useState({});
   const [openCommentInput, setOpenCommentInput] = useState({});
+  const [AddComment, setAddComment] = useState(' ');
+  const [isHovered, setIsHovered] = useState(false);
 
 
   let id = null
@@ -204,7 +209,7 @@ const page = () => {
     window.location.href = '/LogIn'
   }
 
-    //Add Like
+  //Add Like
   const addLike = async (post) => {
     try {
       const response = await axios.put(`${port_uri}app/post/add-likes/${post._id}`, {}, { headers });
@@ -228,7 +233,7 @@ const page = () => {
     }
   };
 
-    //Get all likes
+  //Get all likes
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -248,7 +253,7 @@ const page = () => {
         console.log(error);
         if (error.response) {
           toast.error(error.response.data.message);
-        } 
+        }
       }
     };
     fetch();
@@ -313,7 +318,7 @@ const page = () => {
         console.log(error);
         if (error.response) {
           toast.error(error.response.data.message);
-        } 
+        }
       }
     };
     fetch();
@@ -327,13 +332,38 @@ const page = () => {
     )
   }
 
-  const deletePost = () => {
-    
+  //On mouse over and out
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovered(false);
+  };
+
+  //Delete Post
+  const deletePost = async (post) => {
+    event.preventDefault();
+    const postId = post._id
+    console.log(postId)
+    try {
+      const response = await axios.delete(`http://localhost:5000/app/post/delete-post/${postId}` , {headers})
+      toast.success(response.data.message)
+
+      setUserPosts(userPosts.filter((p) => p._id !== postId));
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Error occurred while sending request");
+      }
+    }
   }
 
   return (
     <div className='my-5 flex flex-col items-center'>
-      <div className='rounded-[50px] bg-[#f5f5f5] shadow-[20px_20px_60px_#d0d0d0,_-20px_-20px_60px_#ffffff] p-8 flex flex-col items-center justify-center gap-2'>
+      <div className='rounded-md bg-[#f5f5f5] shadow-[20px_20px_60px_#d0d0d0,_-20px_-20px_60px_#ffffff] p-8 flex flex-col items-center justify-center gap-2'>
         <div className='flex flex-col justify-center items-center'>
           <div className='relative'>
             <label htmlFor='image'>{userPic ? (<img src={userPic} alt='preview' className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full' />) : (<LuUserCircle2 size={200} />)}</label>
@@ -450,11 +480,20 @@ const page = () => {
         <div
           key={index}
           className={`my-6 p-6 relative ${styles.postBox}`}>
+          <div
+            onMouseOver={handleMouseOver}
+            onMouseOut={handleMouseOut}
+            onClick={() => deletePost(post)}
+            className='absolute top-4 right-1'
+          >
+            {isHovered ? <IoTrashBin size={30} color='red'/> : <IoTrashBinOutline size={30} color='red'/>}
+          </div>
           <div className='flex items-end gap-1'>
+
             {post.profilePic ?
               (<img
                 src={post.profilePic}
-                alt={post.name} className='w-10 h-10 object-cover rounded-full'/>)
+                alt={post.name} className='w-10 h-10 object-cover rounded-full' />)
               : post.profilePic = ' '
                 (<FaUserCircle
                   size={30} />)}

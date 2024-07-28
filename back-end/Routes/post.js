@@ -181,4 +181,41 @@ router.get('/get-comments/:postId', authenticateToken, async (req, res) => {
   }
 })
 
+//Delete Post
+router.delete('/delete-post/:postId', authenticateToken, async (req, res) => {
+  const { postId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(postId)) {
+    return res.status(400).json({ message: "Invalid Post Id" })
+  }
+
+  try {
+    const post = await postModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post Not Found" })
+    }
+
+    const { id } = req.headers;
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User Not Found" })
+    }
+
+    if (!post.userId.equals(user._id)) {
+      return res.status(401).json({ message: "Unauthorized to delete this post" });
+    }
+
+    await postModel.findByIdAndDelete(postId);
+    await userModel.findByIdAndUpdate(id, {
+      $pull: {
+        posts: postId
+      }
+    });
+
+    return res.status(200).json({ message: "Post Deleted Successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 module.exports = router

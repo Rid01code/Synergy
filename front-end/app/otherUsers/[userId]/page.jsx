@@ -9,6 +9,7 @@ import { FaRegThumbsUp } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
+import { toast } from 'react-toastify';
 import styles from "../../../styles/allcss.module.css"
 const page = () => {
 
@@ -23,6 +24,7 @@ const page = () => {
   const [postComment, setPostComment] = useState({});
   const [postLikes, setPostLikes] = useState({});
   const [openCommentInput, setOpenCommentInput] = useState({});
+  const [AddComment, setAddComment] = useState(' ');
 
   //get headers fot authorization
   let id = null

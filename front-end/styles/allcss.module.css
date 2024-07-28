@@ -98,6 +98,13 @@
   width: 100%
 }
 
+.nav_suggestion{
+  background-color: gray;
+  position: absolute;
+  top:4rem;
+  right: 20rem;
+}
+
 
 /* some css for post box */
 .postBox{
