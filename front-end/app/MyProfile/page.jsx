@@ -339,7 +339,7 @@ const page = () => {
     const postId = post._id
     console.log(postId)
     try {
-      const response = await axios.delete(`http://localhost:5000/app/post/delete-post/${postId}`, { headers })
+      const response = await axios.delete(`${port_uri}app/post/delete-post/${postId}`, { headers })
       toast.success(response.data.message)
 
       setUserPosts(userPosts.filter((p) => p._id !== postId));
