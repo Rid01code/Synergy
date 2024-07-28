@@ -29,7 +29,7 @@ const LogIn = () => {
 
   const submitHandler = async (event) => {
     event.preventDefault()
-    const emailOrPhone = SignInEmailOrPhone.current.value
+    const emailOrPhone = SignInEmailOrPhone.current.value.toLowerCase()
     const password = SignInPassword.current.value
     try {
       const response = await axios.post(`${port_uri}app/user/log-in`, {

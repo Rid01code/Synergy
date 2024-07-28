@@ -43,7 +43,7 @@ const page = () => {
   const [postLikes, setPostLikes] = useState({});
   const [openCommentInput, setOpenCommentInput] = useState({});
   const [AddComment, setAddComment] = useState(' ');
-  const [isHovered, setIsHovered] = useState(false);
+  const [hoverStates, setHoverStates] = useState({});
 
 
   let id = null
@@ -332,14 +332,6 @@ const page = () => {
     )
   }
 
-  //On mouse over and out
-  const handleMouseOver = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseOut = () => {
-    setIsHovered(false);
-  };
 
   //Delete Post
   const deletePost = async (post) => {
@@ -347,7 +339,7 @@ const page = () => {
     const postId = post._id
     console.log(postId)
     try {
-      const response = await axios.delete(`http://localhost:5000/app/post/delete-post/${postId}` , {headers})
+      const response = await axios.delete(`http://localhost:5000/app/post/delete-post/${postId}`, { headers })
       toast.success(response.data.message)
 
       setUserPosts(userPosts.filter((p) => p._id !== postId));
@@ -481,13 +473,14 @@ const page = () => {
           key={index}
           className={`my-6 p-6 relative ${styles.postBox}`}>
           <div
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
+            onMouseOver={() => setHoverStates({ ...hoverStates, [post._id]: true })}
+            onMouseOut={() => setHoverStates({ ...hoverStates, [post._id]: false })}
             onClick={() => deletePost(post)}
             className='absolute top-4 right-1'
           >
-            {isHovered ? <IoTrashBin size={30} color='red'/> : <IoTrashBinOutline size={30} color='red'/>}
+            {hoverStates[post._id] ? <IoTrashBin size={30} color='red' /> : <IoTrashBinOutline size={30} color='red' />}
           </div>
+
           <div className='flex items-end gap-1'>
 
             {post.profilePic ?
