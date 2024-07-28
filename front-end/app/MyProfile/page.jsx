@@ -522,7 +522,7 @@ const page = () => {
             (<img src={post.photoUrl} alt={post.title} className='w-80 h-80 object-cover rounded-md ml-10' />)
             :
             (<div
-              className={`${styles.postBox_forText} w-80 h-80 object-cover rounded-md  text-white text-lg font-semibold`}
+              className={`${styles.postBox_forText} w-80 h-80 object-cover rounded-md ml-10 text-white text-lg font-semibold`}
               style={{ backgroundColor: post.theme }}
             >
               {post.textContent}
