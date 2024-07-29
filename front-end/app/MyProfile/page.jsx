@@ -79,6 +79,7 @@ const page = () => {
     authorization: `Bearer ${token}`
   }
 
+  //crop Image
   const getCroppedImg = (image, crop) => {
     return new Promise((resolve, reject) => {
       if (!image || !image.complete) {
@@ -116,6 +117,8 @@ const page = () => {
     });
   }
 
+
+//Upload image
   const handleImage = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -131,8 +134,6 @@ const page = () => {
     try {
       if (profilePicture) {
         const formData = new FormData();
-      
-        // Use the cropped image if available, otherwise use the original
         const imageToUpload = croppedImagePreview ? await fetch(croppedImagePreview).then(r => r.blob()) : profilePicture;
         formData.append('file', imageToUpload);
         formData.append('upload_preset', 'Synergy');
@@ -200,6 +201,7 @@ const page = () => {
     setIsCropping(!isCropping);
   }
 
+  //fetch-user
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -219,10 +221,12 @@ const page = () => {
     fetch()
   })
 
+  //Change Bio
   const changeBio = async () => {
     setIsBioEditable(true);
   }
 
+  //Log-out
   const logout = () => {
     alert('Do You Want To Log Out')
     store.dispatch(authActions.logOut())
@@ -419,12 +423,13 @@ const page = () => {
                   onChange={(newCrop) => setCrop(newCrop)}
                   onComplete={(c) => setCompletedCrop(c)}
                   aspect={1}
+                  className='w-80 h-72 overflow-hidden flex justify-center items-center'
                 >
                   <img
                     ref={imgRef}
                     src={URL.createObjectURL(profilePicture)}
                     alt="Crop me"
-                    className='w-80 h-72 '
+                    className='object-cover w-full h-full'
                   />
                 </ReactCrop>
                 <div className='flex justify-between gap-2'>

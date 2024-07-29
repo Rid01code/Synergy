@@ -20,6 +20,7 @@ const Page = ({ closeButton }) => {
   const PostTags = useRef()
   const imgRef = useRef(null)
 
+  //authenticate
   let id = null;
   let token = null;
 
@@ -33,6 +34,7 @@ const Page = ({ closeButton }) => {
     authorization: `Bearer ${token}`,
   };
 
+  //Crop Image
   const getCroppedImg = (image, crop) => {
     return new Promise((resolve, reject) => {
       if (!image || !image.complete) {
@@ -70,6 +72,7 @@ const Page = ({ closeButton }) => {
     });
   }
 
+  //Upload Image
   const submitHandler = async (event) => {
     event.preventDefault();
 
@@ -128,6 +131,7 @@ const Page = ({ closeButton }) => {
     }
   };
 
+  //Set image
   const handleImage = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -136,6 +140,7 @@ const Page = ({ closeButton }) => {
     }
   };
 
+  //Cancel Image
   const discardImage = () => {
     setImage(null);
     setIsCropping(false);
@@ -143,6 +148,7 @@ const Page = ({ closeButton }) => {
     setCroppedImagePreview(null);
   };
 
+  //Preview Crop Image
   const previewCroppedImage = async () => {
     try {
       if (image && completedCrop) {
@@ -199,7 +205,7 @@ const Page = ({ closeButton }) => {
         <div className='flex justify-center items-center relative overflow-hidden'>
           <label
             htmlFor='file'
-            className={`flex justify-center items-center bg-slate-600 border-2 rounded-lg hover:border-black overflow-hidden cursor-pointer relative`}
+            className={`flex justify-center items-center bg-slate-600 border-2 rounded-lg hover:border-black overflow-hidden cursor-pointer relative w-80 h-80`}
             onClick={(e) => {
               if (image) {
                 e.preventDefault()
@@ -226,14 +232,15 @@ const Page = ({ closeButton }) => {
                 onChange={(newCrop) => setCrop(newCrop)}
                 onComplete={(c) => setCompletedCrop(c)}
                 aspect={1}
-                className='w-80 h-80 overflow-hidden'
               >
-                <img
-                  ref={imgRef}
-                  src={URL.createObjectURL(image)}
-                  alt="Crop me" 
-                  className='w-full h-full object-cover max-w-full max-h-full'
-                />
+                <div className='w-80 h-80 overflow-hidden flex items center justify center'>
+                    <img
+                      ref={imgRef}
+                      src={URL.createObjectURL(image)}
+                      alt="Crop me" 
+                      className='w-full h-full object-cover'
+                  />
+                </div>
               </ReactCrop>
             )}
           </label>
