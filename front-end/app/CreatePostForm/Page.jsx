@@ -199,7 +199,7 @@ const Page = ({ closeButton }) => {
         <div className='flex justify-center items-center relative'>
           <label
             htmlFor='file'
-            className={`flex justify-center items-center bg-slate-600 border-2 rounded-lg w-4/5 lg:w-1/2 h-96 hover:border-black overflow-hidden cursor-pointer`}
+            className={`flex justify-center items-center bg-slate-600 border-2 rounded-lg w-4/5 lg:w-1/2 lg:h-96 h-72 hover:border-black overflow-hidden cursor-pointer`}
             onClick={(e) => {
               if (image) {
                 e.preventDefault()
