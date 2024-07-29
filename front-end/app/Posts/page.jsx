@@ -17,7 +17,12 @@ import { authActions } from '@/Store/Auth';
 import background from "../../assets/background.png";
 import photoVideo from "../../assets/photo-video.png"
 import download from "../../assets/download.png"
+import { Bree_Serif } from 'next/font/google';
 
+const bree_serif = Bree_Serif({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 
 function posts() {
@@ -346,7 +351,7 @@ function posts() {
                 (<FaUserCircle
                   size={30}
                   onClick={() => handleProfileClick(post)} />)}
-              <div className='text-xl'>
+              <div className={`text-xl ${bree_serif.className}`}>
                 {post.name}
               </div>
             </div>
@@ -388,7 +393,7 @@ function posts() {
                 )}
                 <details className='text-blue-600 text-xl'>
                   <summary></summary>
-                  <div className='absolute left-[12px] bg-slate-400 p-4 rounded-lg z-10'>
+                  <div className={`absolute left-[12px] bg-slate-400 p-4 rounded-lg z-10 ${bree_serif.className}`}>
                     {postLikes[post._id] && postLikes[post._id].usersWhoLike.map((users, index) => (
                       <p key={index}>{users.userId.name} </p>
                     ))}
@@ -403,7 +408,7 @@ function posts() {
                   <div className='absolute right-[12px] bg-slate-400 p-4 rounded-lg z-10'>
                     {postComment[post._id] && postComment[post._id].usersWhoComment.map((comment, index) => (
                       <div key={index}>
-                        <p className='font-semibold text-blue-500 text-lg'>{comment.userId.name}</p>
+                        <p className={`font-semibold text-blue-500 text-lg ${bree_serif.className}`}>{comment.userId.name}</p>
                         <p className='ml-6 text-black font-xs'>{comment.comment}</p>
                       </div>
                     ))}

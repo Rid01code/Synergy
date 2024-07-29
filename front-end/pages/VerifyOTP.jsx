@@ -3,6 +3,17 @@ import React, { useState, useRef } from 'react';
 import styles from  "../styles/allcss.module.css"
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Bree_Serif , Ubuntu } from 'next/font/google';
+
+const bree_serif = Bree_Serif({
+  weight: '400',
+  subsets: ['latin'],
+})
+
+const ubuntu = Ubuntu({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 const VerifyOTP = ({ SignInName, SignInPhone, SignInEmail, SignInPassword, setIsOpenPopUp }) => {
 
@@ -88,8 +99,8 @@ const VerifyOTP = ({ SignInName, SignInPhone, SignInEmail, SignInPassword, setIs
         </button>
       
         <div className="mb-5 text-center">
-          <h2 className="text-2xl font-black">Two-Factor Verification</h2>
-          <p className="mt-2.5 text-base">Enter the two-factor authentication code provided by the authenticator app</p>
+          <h2 className={`text-2xl font-black ${ubuntu.className}`}>Two-Factor Verification</h2>
+          <p className={`mt-2.5 text-base ${ubuntu.className}`}>Enter the two-factor authentication code provided by the authenticator app</p>
         </div>
 
         <div className="flex justify-between gap-2.5">
@@ -110,13 +121,13 @@ const VerifyOTP = ({ SignInName, SignInPhone, SignInEmail, SignInPassword, setIs
         <div className="mt-5 flex gap-2">
           <button
             onClick={handleVerify}
-            className="px-5 py-2.5 rounded text-base font-medium text-white bg-[#141414] border border-[#2e2e2e] transition-all duration-500 hover:bg-[#2e2e2e]"
+            className={`px-5 py-2.5 rounded text-base font-medium text-white bg-[#141414] border border-[#2e2e2e] transition-all duration-500 hover:bg-[#2e2e2e] ${bree_serif.className}`}
           >
             Verify
           </button>
           <button
             onClick={handleClear}
-            className="px-5 py-2.5 rounded text-base font-medium text-[#2e2e2e] border border-[#2e2e2e] transition-all duration-500 hover:text-[#fa5656] hover:border-[#fa5656]"
+            className={`px-5 py-2.5 rounded text-base font-medium text-[#2e2e2e] border border-[#2e2e2e] transition-all duration-500 hover:text-[#fa5656] hover:border-[#fa5656] ${bree_serif.className}`}
           >
             Clear
           </button>

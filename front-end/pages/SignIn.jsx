@@ -6,6 +6,17 @@ import styles from '../styles/allcss.module.css'
 import VerifyOTP from './VerifyOTP';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { Bree_Serif , Ubuntu } from 'next/font/google';
+
+const bree_serif = Bree_Serif({
+  weight: '400',
+  subsets: ['latin'],
+})
+
+const ubuntu = Ubuntu({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 
 const SignIn = () => {
@@ -63,7 +74,7 @@ const SignIn = () => {
       <div className="border border-[#8d8d8d] p-5 rounded-[20px] bg-white">
 
 
-        <div className={`text-xl font-bold mb-5 relative pl-8 ${styles.title}`}>SignIn to your account</div>
+        <div className={`text-xl font-bold mb-5 relative pl-8 ${styles.title} ${ubuntu.className}`}>SignIn to your account</div>
 
         <form className="max-w-[300px] flex flex-col gap-5">
           <div className="relative">
@@ -171,7 +182,7 @@ const SignIn = () => {
           <div className="w-full flex items-center gap-5">
             <button
               type="submit"
-              className="px-2 py-2.5 text-base uppercase tracking-[3px] rounded-lg border border-[#1034aa] border-b-[#90c2ff] bg-gradient-to-br from-[#0034de] to-[#006eff] text-white font-bold transition-all duration-200 shadow-[0px_2px_3px_#000d3848,inset_0px_4px_5px_#0070f0,inset_0px_-4px_5px_#002cbb] active:shadow-[inset_0px_4px_5px_#0070f0,inset_0px_-4px_5px_#002cbb] active:scale-[0.995]"
+              className={`px-2 py-2.5 text-base uppercase tracking-[3px] rounded-lg border border-[#1034aa] border-b-[#90c2ff] bg-gradient-to-br from-[#0034de] to-[#006eff] text-white font-bold transition-all duration-200 shadow-[0px_2px_3px_#000d3848,inset_0px_4px_5px_#0070f0,inset_0px_-4px_5px_#002cbb] active:shadow-[inset_0px_4px_5px_#0070f0,inset_0px_-4px_5px_#002cbb] active:scale-[0.995] ${bree_serif.className}`}
               onClick={getOtp}
             >
               Get OTP
@@ -181,7 +192,7 @@ const SignIn = () => {
               isOpenPopUp && <VerifyOTP SignInName={SignInName} SignInPhone={SignInPhone} SignInEmail={SignInEmail} SignInPassword={SignInPassword} setIsOpenPopUp={setIsOpenPopUp} />
             }
 
-            <div className="text-sm">
+            <div className={`${bree_serif.className} text-sm`}>
               All ready have an account ?
               <Link href='/LogIn' className="text-blue-600 cursor-pointer ml-1">Log In</Link>
             </div>

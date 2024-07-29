@@ -10,7 +10,6 @@ module.exports = {
     extend: {
       colors: {
         'custom-purple': 'rgb(98 , 0 , 225)'
-        
       },
       rotate: {
         '360' : '360deg',

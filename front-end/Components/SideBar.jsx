@@ -9,6 +9,12 @@ import Home from "../assets/Home.png"
 import Create from "../assets/Create.png"
 import axios from 'axios'
 import { IoIosArrowDropdownCircle } from "react-icons/io";
+import { Ubuntu } from 'next/font/google'
+
+const ubuntu = Ubuntu({
+  weight: '700',
+  subsets: ['latin'],
+})
 
 const SideBar = () => {
 
@@ -76,7 +82,7 @@ const SideBar = () => {
   return (
     <div className={`h-full relative ${styles.navUI}`}>
 
-      <div className={`${styles.sidebar} border-b-2 border-black`}>
+      <div className={`${styles.sidebar} border-b-2 border-black ${ubuntu.className}`}>
         <Link href='/Posts' onClick={(e) => handleTransition(e, '/Posts')}>
           <div className={`flex gap-2 items-end justify-start ${styles.sidebar_btn} ${activeTab === "Posts" ? styles.sidebar_btn_active : ''}`}>
             <Image src={Home} alt='Home' className='w-12 h-12' />

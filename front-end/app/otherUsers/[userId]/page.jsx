@@ -11,6 +11,24 @@ import { FaThumbsUp } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import { toast } from 'react-toastify';
 import styles from "../../../styles/allcss.module.css"
+import { Bree_Serif , Ubuntu , Rubik } from 'next/font/google';
+
+const bree_serif = Bree_Serif({
+  weight: '400',
+  subsets: ['latin'],
+})
+
+const ubuntu = Ubuntu({
+  weight: '700',
+  subsets: ['latin'],
+})
+
+const rubik = Rubik({
+  wight: '600',
+  subsets:['latin']
+})
+
+
 const page = () => {
 
   const port_uri = process.env.PORT_URL
@@ -183,16 +201,16 @@ const page = () => {
           </div>
         </div>
 
-        <h1 className='text-2xl font-bold'>{userName}</h1>
+        <h1 className={`${bree_serif.className} text-2xl font-bold`}>{userName}</h1>
 
         <div className='flex flex-col items-center gap-1'>
-          <p className='font-serif text-lg font-semibold'>{userBio}</p>
+          <p className={`${rubik.className} font-serif text-lg font-semibold`}>{userBio}</p>
         </div>
 
         <div className='flex flex-col items-center justify-center'>
-          <h1 className='text-3xl font-extrabold mb-4 underline'>Contact Details</h1>
-          <div className='gap-4'><span className='text-xl font-bold'>Email: </span><span className='font-mono text-blue-600 font-bold'>{userEmail}</span></div>
-          <div className='gap-4'><span className='text-xl font-bold'>Number: </span><span className='font-mono text-blue-600 font-bold'>{userPhone}</span></div>
+          <h1 className={`text-3xl font-extrabold mb-4 underline ${ubuntu.className}`}>Contact Details</h1>
+          <div className='gap-4'><span className={`text-xl font-bold ${ubuntu.className}`}>Email: </span><span className={`${bree_serif.className} text-blue-600 font-bold`}>{userEmail}</span></div>
+          <div className='gap-4'><span className={`text-xl font-bold ${ubuntu.className}`}>Number: </span><span className={`${bree_serif.className} text-blue-600 font-bold`}>{userPhone}</span></div>
         </div>
       </div>
 
@@ -208,7 +226,7 @@ const page = () => {
               : post.profilePic = ' '
                 (<FaUserCircle
                   size={30}/>)}
-            <div className='text-xl'>
+            <div className={`text-xl ${bree_serif.className}`}>
               {post.name}
             </div>
           </div>
@@ -249,7 +267,7 @@ const page = () => {
               )}
               <details className='text-blue-600 text-xl'>
                 <summary></summary>
-                <div className='absolute left-[12px] bg-slate-400 p-4 rounded-lg z-10'>
+                <div className={`absolute left-[12px] bg-slate-400 p-4 rounded-lg z-10 ${bree_serif.className}`}>
                   {postLikes[post._id] && postLikes[post._id].usersWhoLike.map((users, index) => (
                     <p key={index}>{users.userId.name} </p>
                   ))}
@@ -264,7 +282,7 @@ const page = () => {
                 <div className='absolute right-[12px] bg-slate-400 p-4 rounded-lg z-10'>
                   {postComment[post._id] && postComment[post._id].usersWhoComment.map((comment, index) => (
                     <div key={index}>
-                      <p className='font-semibold text-blue-500 text-lg'>{comment.userId.name}</p>
+                      <p className={`font-semibold text-blue-500 text-lg ${bree_serif.className}`}>{comment.userId.name}</p>
                       <p className='ml-6 text-black font-xs'>{comment.comment}</p>
                     </div>
                   ))}

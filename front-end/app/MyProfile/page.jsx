@@ -17,6 +17,28 @@ import { FaThumbsUp } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { IoTrashBin } from "react-icons/io5";
+import { Bree_Serif , Ubuntu , Rubik , Roboto_Slab} from 'next/font/google';
+
+const bree_serif = Bree_Serif({
+  weight: '400',
+  subsets: ['latin'],
+})
+
+const rubik = Rubik({
+  wight: '600',
+  subsets:['latin']
+})
+
+const roboto = Roboto_Slab({
+  wight: '600',
+  subsets:['latin']
+})
+
+const ubuntu = Ubuntu({
+  weight: '700',
+  subsets: ['latin'],
+})
+
 
 
 const page = () => {
@@ -396,13 +418,13 @@ const page = () => {
                 </ReactCrop>
                 <div className='flex justify-between gap-2'>
                   <button
-                    className='text-xs bg-slate-700 px-4 py-2 text-white border-2 border-slate-700 rounded-md'
+                    className={`text-xs bg-slate-700 px-4 py-2 text-white border-2 border-slate-700 rounded-md ${roboto.className}`}
                     onClick={previewCroppedImage}>
                     Preview
                   </button>
                   <button
                     onClick={cancel}
-                    className='text-xs bg-red-700 px-4 py-2 text-white border-2 border-red-700 rounded-md'>
+                    className={`text-xs bg-red-700 px-4 py-2 text-white border-2 border-red-700 rounded-md ${roboto.className}`}>
                     Cancel
                   </button>
                 </div>
@@ -415,13 +437,13 @@ const page = () => {
               <div className='flex justify-between gap-2'>
                 <button
                   onClick={updateProfile}
-                  className='bg-blue-700 px-4 py-2 text-white border-2 border-blue-700 rounded-md text-xs'
+                  className={`bg-blue-700 px-4 py-2 text-white border-2 border-blue-700 rounded-md text-xs ${roboto.className}`}
                 >
                   Upload Picture
                 </button>
                 <button
                   onClick={toggleCropping}
-                  className='bg-slate-700 px-4 py-2 text-white border-2 border-slate-700 rounded-md text-xs'>
+                  className={`bg-slate-700 px-4 py-2 text-white border-2 border-slate-700 rounded-md text-xs ${roboto.className}`}>
                   Crop Image
                 </button>
               </div>
@@ -429,7 +451,7 @@ const page = () => {
           }
         </div>
 
-        <h1 className='text-2xl font-bold'>{userName}</h1>
+        <h1 className={`text-2xl font-bold ${bree_serif.className}`}>{userName}</h1>
 
         <div className='flex flex-col items-center gap-1'>
           {
@@ -442,24 +464,24 @@ const page = () => {
                 className='border-s-2 border-b-2 hover:outline-none hover:border-s-black hover:border-b-black focus:outline-none focus:border-s-blue-600 focus:border-b-blue-600'
               />
             ) : (
-              <p className='font-serif text-lg text-slate-800 font-semibold'>{userBio}</p>
+                <p className={`font-serif text-lg text-slate-800 font-semibold ${rubik.className}`}>{userBio}</p>
             )
           }
 
           {
             isBioEditable ? (
-              <button onClick={updateProfile} className='bg-blue-700 px-[4px] py-[5px] text-white text-xs border-2 border-blue-700 rounded-md'>Update Bio</button>
+              <button onClick={updateProfile} className={`bg-blue-700 px-[4px] py-[5px] text-white text-xs border-2 border-blue-700 rounded-md ${roboto.className}`}>Update Bio</button>
             ) : (
-              <button onClick={changeBio} className='bg-blue-700 px-[4px] py-[5px] text-white text-xs border-2 border-blue-700 rounded-md'>Change Bio</button>
+              <button onClick={changeBio} className={`bg-blue-700 px-[4px] py-[5px] text-white text-xs border-2 border-blue-700 rounded-md ${roboto.className}`}>Change Bio</button>
             )
           }
         </div>
 
         <div className='flex flex-col items-center justify-center'>
-          <h1 className='text-3xl font-extrabold mb-4 underline'>Contact Details</h1>
-          <div className='gap-4'><span className='text-xl text-slate-800 font-bold'>Email: </span><span className='font-mono font-bold text-blue-700'>{userEmail}</span></div>
-          <div className='gap-4'><span className='text-xl font-bold text-slate-800'>Number: </span><span className='font-mono font-bold
-          text-blue-700'>{userPhone}</span></div>
+          <h1 className={`text-3xl font-extrabold mb-4 underline ${ubuntu.className}`}>Contact Details</h1>
+          <div className='gap-4'><span className={`text-xl text-slate-800 font-bold ${ubuntu.className}`}>Email: </span><span className={`${bree_serif.className} font-mono font-bold text-blue-700`}>{userEmail}</span></div>
+          <div className='gap-4'><span className={`text-xl font-bold text-slate-800 ${ubuntu.className}`}>Number: </span><span className={`font-mono font-bold
+          text-blue-700 ${bree_serif.className}`}>{userPhone}</span></div>
         </div>
 
         <div onClick={logout}>
@@ -490,7 +512,7 @@ const page = () => {
               : post.profilePic = ' '
                 (<FaUserCircle
                   size={30} />)}
-            <div className='text-xl'>
+            <div className={`text-xl ${bree_serif.className}`}>
               {post.name}
             </div>
           </div>
@@ -531,7 +553,7 @@ const page = () => {
               )}
               <details className='text-blue-600 text-xl'>
                 <summary></summary>
-                <div className='absolute left-[12px] bg-slate-400 p-4 rounded-lg z-10'>
+                <div className={`${bree_serif.className} absolute left-[12px] bg-slate-400 p-4 rounded-lg z-10`}>
                   {postLikes[post._id] && postLikes[post._id].usersWhoLike.map((users, index) => (
                     <p key={index}>{users.userId.name} </p>
                   ))}
@@ -546,7 +568,7 @@ const page = () => {
                 <div className='absolute right-[12px] bg-slate-400 p-4 rounded-lg z-10'>
                   {postComment[post._id] && postComment[post._id].usersWhoComment.map((comment, index) => (
                     <div key={index}>
-                      <p className='font-semibold text-blue-500 text-lg'>{comment.userId.name}</p>
+                      <p className={`${bree_serif.className} font-semibold text-blue-500 text-lg`}>{comment.userId.name}</p>
                       <p className='ml-6 text-black font-xs'>{comment.comment}</p>
                     </div>
                   ))}

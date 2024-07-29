@@ -8,6 +8,17 @@ import axios from 'axios'
 import io from "socket.io-client"
 import { LuUserCircle2 } from "react-icons/lu";
 import { IoIosSend } from "react-icons/io";
+import { Bree_Serif , Ubuntu } from 'next/font/google'
+
+const bree_serif = Bree_Serif({
+  weight: '400',
+  subsets: ['latin'],
+})
+
+const ubuntu = Ubuntu({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 
 const Contact = () => {
@@ -152,7 +163,7 @@ const Contact = () => {
       <div className={`flex flex-col justify-center ${styles.navUI}`}>
         <div className='flex items-end justify-center'>
           <Image src={ContactLogo} alt='' className='w-12 h-12' />
-          <h1 className='font-bold text-lg'>Contact</h1>
+          <h1 className={`font-bold text-lg ${ubuntu.className}`}>Contact</h1>
         </div>
 
         <div>
@@ -160,7 +171,7 @@ const Contact = () => {
             {users.filter(user => user._id !== currentUserId).map(user => (
               <li
                 key={user._id}
-                className={`flex items-center p-2 ${styles.contact_list} hover:bg-gray-100 cursor-pointer ${selectedUser?._id === user._id ? 'bg-gray-200' : ''}`}
+                className={`${bree_serif.className} flex items-center p-2 ${styles.contact_list} hover:bg-gray-100 cursor-pointer ${selectedUser?._id === user._id ? 'bg-gray-200' : ''}`}
                 onClick={() => setSelectedUser(user)}
               >
                 {user.profilePic ? (
