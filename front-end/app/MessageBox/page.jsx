@@ -5,7 +5,13 @@ import io from 'socket.io-client';
 import { IoIosSend } from "react-icons/io";
 import { LuUserCircle2 } from "react-icons/lu";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import styles from  "../../styles/allcss.module.css"
+import styles from "../../styles/allcss.module.css"
+import { Bree_Serif } from 'next/font/google';
+
+const bree_serif = Bree_Serif({
+  weight: '400',
+  subsets: ['latin'],
+})
 
 const ChatPage = () => {
 
@@ -243,12 +249,14 @@ useEffect(() => {
                 }}
               >
                 {user.profilePic ? (
-                  <img src={user.profilePic} className="w-12 h-12 rounded-full mr-4" alt={user.name} />
+                  <div className=' w-12 h-12 rounded-full mr-4 overflow-hidden'>
+                    <img src={user.profilePic} className="object-cover w-full h-full" alt={user.name} />
+                  </div>  
                 ) : (
                   <LuUserCircle2 size={48} className="mr-4" />
                 )}
                 <div className='flex flex-col'>
-                  <span>{user.name}</span>
+                  <span className={`${bree_serif.className}`}>{user.name}</span>
                   <span className='text-xs text-gray-600'>{getLastMessage(user._id)}</span>
                 </div>
               </li>
@@ -265,12 +273,13 @@ useEffect(() => {
               >
                 <IoMdArrowRoundBack size={30} />
               </button>
-              {selectedUser.profilePic ? (
-                <img src={selectedUser.profilePic} className="w-10 h-10 rounded-full mr-3" alt={selectedUser.name} />
-              ) : (
+                {selectedUser.profilePic ? (
+                <div className="w-10 h-10 rounded-full mr-3 overflow-hidden">
+                  <img src={selectedUser.profilePic} className="object-cover w-full h-full" alt={selectedUser.name} />
+                </div>) : (
                 <LuUserCircle2 size={40} className="mr-3" />
               )}
-              <h3 className="text-lg font-semibold">{selectedUser.name}</h3>
+                <h3 className={`text-lg font-semibold ${bree_serif.className}`}>{selectedUser.name}</h3>
             </div>
             <div className="flex-1 overflow-y-auto p-4">
               {messages.map((message, index) => (

@@ -380,7 +380,14 @@ const page = () => {
       <div className='rounded-md bg-[#f5f5f5] shadow-[20px_20px_60px_#d0d0d0,_-20px_-20px_60px_#ffffff] p-8 flex flex-col items-center justify-center gap-2'>
         <div className='flex flex-col justify-center items-center'>
           <div className='relative'>
-            <label htmlFor='image'>{userPic ? (<img src={userPic} alt='preview' className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full' />) : (<LuUserCircle2 size={200} />)}</label>
+            <label htmlFor='image'>
+              {userPic ?
+                (<div className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full overflow-hidden'>
+                  <img src={userPic} alt='preview' className='object-cover h-full w-full'/>
+                </div>)
+                :
+                (<LuUserCircle2 size={200} />)}
+            </label>
             <input
               className='sr-only'
               type='file'
@@ -388,16 +395,20 @@ const page = () => {
               onChange={handleImage}
             />
             {profilePicture && (
-              <img
-                src={URL.createObjectURL(profilePicture)}
-                alt='preview' width={200} height={200}
-                className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10' />)}
+              <div className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10 overflow-hidden'>
+                <img
+                  src={URL.createObjectURL(profilePicture)}
+                  alt='preview'
+                  className='object-cover w-full h-full'/>
+              </div>)}
             
             {croppedImagePreview && (
-              <img
-                src={croppedImagePreview}
-                alt='preview' width={200} height={200}
-                className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10' />
+              <div className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10 overflow-hidden'>
+                <img
+                  src={croppedImagePreview}
+                  alt='preview'
+                  className='object-cover h-full w-full' />
+              </div>
             )}
 
             {profilePicture && isCropping && (
@@ -506,9 +517,11 @@ const page = () => {
           <div className='flex items-end gap-1'>
 
             {post.profilePic ?
-              (<img
+              (<div className='w-10 h-10 object-cover rounded-full overflow-hidden'>
+                <img
                 src={post.profilePic}
-                alt={post.name} className='w-10 h-10 object-cover rounded-full' />)
+                alt={post.name} className='object-cover w-full h-full' />
+              </div>)
               : post.profilePic = ' '
                 (<FaUserCircle
                   size={30} />)}
@@ -534,7 +547,9 @@ const page = () => {
           </div>
 
           {post.photoUrl ?
-            (<img src={post.photoUrl} alt={post.title} className='w-80 h-80 object-cover rounded-md ml-10' />)
+            (<div className='overflow-hideen w-80 h-80 object-cover rounded-md ml-10'>
+              <img src={post.photoUrl} alt={post.title} className='object-cover w-full h-full' />
+            </div>)
             :
             (<div
               className={`${styles.postBox_forText} w-80 h-80 object-cover rounded-md ml-10 text-white text-lg font-semibold`}

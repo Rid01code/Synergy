@@ -197,7 +197,11 @@ const page = () => {
       <div className='rounded-[50px] bg-[#f5f5f5] shadow-[20px_20px_60px_#d0d0d0,_-20px_-20px_60px_#ffffff] p-8 flex flex-col items-center justify-center gap-2'>
         <div className='flex flex-col justify-center items-center'>
           <div className='relative'>
-            {userProfilePic ? (<img src={userProfilePic} alt='preview' className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full ' />) : (<LuUserCircle2 size={200} />)}
+            {userProfilePic ? (
+              <div className='overflow-hidden w-[200px] h-[200px] border-4 border-sky-600 rounded-full'>
+                <img src={userProfilePic} alt='preview' className='object-cover w-full h-full' />
+              </div>)
+              : (<LuUserCircle2 size={200} />)}
           </div>
         </div>
 
@@ -220,9 +224,11 @@ const page = () => {
           className={`my-6 p-6 relative ${styles.postBox}`}>
           <div className='flex items-end gap-1'>
             {post.profilePic ?
-              (<img
+              (<div className='overflow-hidden w-10 h-10 object-cover rounded-full'>
+                <img
                 src={post.profilePic}
-                alt={post.name} className='w-10 h-10 object-cover rounded-full'/>)
+                alt={post.name} className='object-cover w-full h-full '/>
+              </div>)
               : post.profilePic = ' '
                 (<FaUserCircle
                   size={30}/>)}
@@ -248,7 +254,9 @@ const page = () => {
           </div>
 
           {post.photoUrl ?
-            (<img src={post.photoUrl} alt={post.title} className='w-80 h-80 object-cover rounded-md ml-10' />)
+            (<div className='overflow-hidden w-80 h-80 object-cover rounded-md ml-10'>
+              <img src={post.photoUrl} alt={post.title} className='object-cover w-full h-full' />
+            </div>  )
             :
             (<div
               className={`${styles.postBox_forText} w-80 h-80 object-cover rounded-md ml-10 text-white text-lg font-semibold`}

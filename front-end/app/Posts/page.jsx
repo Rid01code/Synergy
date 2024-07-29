@@ -287,11 +287,13 @@ function posts() {
           onSubmit={handleSubmit}
         >
           <div className='flex items-center justify-around gap-2 border-b-2 border-b-gray-300 pb-2'>
-            <img
+            <div className='w-12 h-12 rounded-full overflow-hidden'>
+              <img
               src={userProfilePic}
               alt='profilePic'
-              className='w-12 h-12 rounded-full'
-            />
+              className='object-cover w-full h-full'
+              />
+            </div>
             <input
               type='text'
               ref={postContent}
@@ -343,10 +345,12 @@ function posts() {
             className={`my-6 p-6 relative ${styles.postBox}`}>
             <div className='flex items-end gap-1'>
               {post.profilePic ?
-                (<img
-                  src={post.profilePic}
-                  alt={post.name} className='w-10 h-10 object-cover rounded-full'
-                  onClick={() => handleProfileClick(post)} />)
+                (<div className='w-10 h-10 object-cover rounded-full overflow-hidden'> 
+                    <img
+                    src={post.profilePic}
+                    alt={post.name} className='object-cover w-full h-full'
+                    onClick={() => handleProfileClick(post)} />
+                  </div>)
                 :post.profilePic = ' '
                 (<FaUserCircle
                   size={30}
@@ -374,7 +378,9 @@ function posts() {
             </div>
 
             {post.photoUrl ?
-              (<img src={post.photoUrl} alt={post.title} className='w-80 h-80 object-cover rounded-md ml-10' />)
+              (<div className='w-80 h-80 rounded-md ml-10 overflow-hidden'>
+                <img src={post.photoUrl} alt={post.title} className='object-cover w-full h-full' />
+              </div>)
               :
               (<div
                 className={`${styles.postBox_forText} w-80 h-80 object-cover rounded-md ml-10 text-white text-lg font-semibold`}
@@ -382,7 +388,6 @@ function posts() {
               >
                 {post.textContent}
               </div>)}
-
             <div className='flex justify-between items-center ml-10 mt-8 px-5 border-t-2'>
               <div className='flex gap-2 items-start'>
                 <p className='font-semibold text-xl mt-[1px]'>{postLikes[post._id] ? postLikes[post._id].likesCount : 0}</p>
@@ -416,9 +421,7 @@ function posts() {
                 </details>
               </div>
             </div>
-
             {openCommentInput[post._id] && (
-
               <div className='flex items-center justify-end mt-4'>
                 <input
                   type="text"

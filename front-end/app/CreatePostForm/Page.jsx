@@ -196,10 +196,10 @@ const Page = ({ closeButton }) => {
 
       <div className='flex flex-col mb-8'>
         <label htmlFor='image' className='text-xl'>Image</label>
-        <div className='flex justify-center items-center relative'>
+        <div className='flex justify-center items-center relative overflow-hidden'>
           <label
             htmlFor='file'
-            className={`flex justify-center items-center bg-slate-600 border-2 rounded-lg w-4/5 lg:w-1/2 lg:h-96 h-72 hover:border-black overflow-hidden cursor-pointer`}
+            className={`flex justify-center items-center bg-slate-600 border-2 rounded-lg hover:border-black overflow-hidden cursor-pointer relative`}
             onClick={(e) => {
               if (image) {
                 e.preventDefault()
@@ -211,15 +211,11 @@ const Page = ({ closeButton }) => {
               className='absolute'
             />
             {image && !isCropping && (
-              <div className='z-10 flex items-center justify-center w-full h-full'>
+              <div className='z-10 w-80 h-80 overflow-hidden relative flex justify-center items-center'>
                 <img
                   src={croppedImagePreview || URL.createObjectURL(image)}
                   alt='preview'
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    objectFit: 'contain'
-                  }}
+                  className='max-w-full max-h-full object-cover '
                 />
               </div>
             )}
@@ -230,12 +226,13 @@ const Page = ({ closeButton }) => {
                 onChange={(newCrop) => setCrop(newCrop)}
                 onComplete={(c) => setCompletedCrop(c)}
                 aspect={1}
+                className='w-80 h-80 overflow-hidden'
               >
                 <img
                   ref={imgRef}
                   src={URL.createObjectURL(image)}
                   alt="Crop me" 
-                  style={{maxHeight: '100%', maxWidth: '100%'}}
+                  className='w-full h-full object-cover max-w-full max-h-full'
                 />
               </ReactCrop>
             )}
