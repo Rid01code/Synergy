@@ -1,9 +1,9 @@
 import { Inter } from "next/font/google";
 import Providers from "@/Provider/Provider";
 import "../styles/globals.css";
-import Nav from "@/Components/Nav";
-import SideBar from "@/Components/SideBar";
-import Contact from "@/Components/Contact";
+import Nav from "@/app/Components/Nav";
+import SideBar from "@/app/Components/SideBar";
+import Contact from "@/app/Components/Contact";
 import Posts from "./Posts/page.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

@@ -7,14 +7,9 @@ import { FaRightFromBracket } from "react-icons/fa6";
 import { useStore } from 'react-redux';
 import { authActions } from '@/Store/Auth';
 import ReactCrop from 'react-image-crop';
-import moment from 'moment';
+import Card from '../Components/Card';
 import 'react-image-crop/dist/ReactCrop.css';
 import styles from "../../styles/allcss.module.css"
-import { FaUserCircle } from "react-icons/fa";
-import { FaRegThumbsUp } from "react-icons/fa";
-import { FaRegComment } from "react-icons/fa";
-import { FaThumbsUp } from "react-icons/fa";
-import { IoMdSend } from "react-icons/io";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { IoTrashBin } from "react-icons/io5";
 import { Bree_Serif , Ubuntu , Rubik , Roboto_Slab} from 'next/font/google';
@@ -44,27 +39,39 @@ const ubuntu = Ubuntu({
 const page = () => {
 
   const store = useStore()
+
   const port_uri = process.env.PORT_URL
   
   const [userPic, setUserPic] = useState()
+
   const [userName, setUserName] = useState()
+
   const [userEmail, setUserEmail] = useState()
+
   const [userPhone, setUserPhone] = useState()
+
   const [userBio, setUserBio] = useState(null)
+
   const [userPosts, setUserPosts] = useState([])
+
   const [bio, setBio] = useState('')
+
   const [profilePicture, setProfilePicture] = useState()
+
   const [isBioEditable, setIsBioEditable] = useState(false);
+
   const [isLoading, setIsLoading] = useState(true);
+
   const [crop, setCrop] = useState({ unit: '%', x: 0, y: 0, width: 50, height: 50, aspect: 1 });
+
   const [completedCrop, setCompletedCrop] = useState(null);
+
   const [isCropping, setIsCropping] = useState(false);
+
   const imgRef = useRef(null);
+
   const [croppedImagePreview, setCroppedImagePreview] = useState(null);
-  const [postComment, setPostComment] = useState({});
-  const [postLikes, setPostLikes] = useState({});
-  const [openCommentInput, setOpenCommentInput] = useState({});
-  const [AddComment, setAddComment] = useState(' ');
+  
   const [hoverStates, setHoverStates] = useState({});
 
 
@@ -118,7 +125,7 @@ const page = () => {
   }
 
 
-//Upload image
+  //Upload image
   const handleImage = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -128,6 +135,7 @@ const page = () => {
     }
   };
 
+  //Update Profile
   const updateProfile = async (event) => {
     event.preventDefault();
     console.log(bio);
@@ -180,6 +188,7 @@ const page = () => {
     }
   };
 
+  //Preview Image
   const previewCroppedImage = async () => {
     try {
       if (profilePicture && completedCrop) {
@@ -193,13 +202,15 @@ const page = () => {
     }
   };
   
+  //Cancel Preview Image
   const cancel = () => {
     setIsCropping(false);
-  }
+  };
 
+  //Toggle Crop
   const toggleCropping = () => {
     setIsCropping(!isCropping);
-  }
+  };
 
   //fetch-user
   useEffect(() => {
@@ -219,12 +230,12 @@ const page = () => {
       }
     }
     fetch()
-  })
+  });
 
   //Change Bio
   const changeBio = async () => {
     setIsBioEditable(true);
-  }
+  };
 
   //Log-out
   const logout = () => {
@@ -233,131 +244,7 @@ const page = () => {
     localStorage.clear('id')
     localStorage.clear('token')
     window.location.href = '/LogIn'
-  }
-
-  //Add Like
-  const addLike = async (post) => {
-    try {
-      const response = await axios.put(`${port_uri}app/post/add-likes/${post._id}`, {}, { headers });
-
-      setPostLikes((prevPostLikes) => ({
-        ...prevPostLikes,
-        [post._id]: {
-          ...prevPostLikes[post._id],
-          likesCount: prevPostLikes[post._id].likesCount + 1,
-          hasLiked: true,
-        },
-      }));
-      toast.success(response.data.message);
-    } catch (error) {
-      console.log(error);
-      if (error.response) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Error occurred while sending request");
-      }
-    }
   };
-
-  //Get all likes
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await axios.get(`${port_uri}app/post/get-post`, { headers });
-        const posts = response.data.posts;
-        const postLikesObj = {};
-        await Promise.all(posts.map(async (post) => {
-          const likesResponse = await axios.get(`${port_uri}app/post/get-likes/${post._id}`, { headers });
-          postLikesObj[post._id] = {
-            likesCount: likesResponse.data.likesCount,
-            usersWhoLike: likesResponse.data.usersWhoLike,
-            hasLiked: likesResponse.data.hasLiked,
-          };
-        }));
-        setPostLikes(postLikesObj);
-      } catch (error) {
-        console.log(error);
-        if (error.response) {
-          toast.error(error.response.data.message);
-        }
-      }
-    };
-    fetch();
-  }, []);
-
-
-  //Open comment Input
-  const doComment = (postId) => {
-    setOpenCommentInput((prevOpenCommentInput) => ({
-      ...prevOpenCommentInput,
-      [postId]: !prevOpenCommentInput[postId],
-    }));
-  };
-
-
-  //Add comment
-  const addComments = async (post) => {
-    try {
-      const response = await axios.put(`${port_uri}app/post/add-comments/${post._id}`, { comment: AddComment }, { headers });
-
-      const currentUserResponse = await axios.get(`${port_uri}app/user/user-info`, { headers });
-      const currentUserName = currentUserResponse.data.userInfo.name;
-      setPostComment((prevPostComment) => ({
-        ...prevPostComment,
-        [post._id]: {
-          ...prevPostComment[post._id],
-          commentsCount: prevPostComment[post._id].commentsCount + 1,
-          usersWhoComment: [...prevPostComment[post._id].usersWhoComment, { userId: { name: currentUserName }, comment: AddComment }],
-        },
-      }));
-
-      toast.success(response.data.message);
-      setAddComment("");
-      setOpenCommentInput(false);
-    } catch (error) {
-      console.log(error);
-      if (error.response) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Error occurred while sending request");
-      }
-    }
-  };
-
-
-  //Get comment
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await axios.get(`${port_uri}app/post/get-post`, { headers });
-        const posts = response.data.posts;
-        const postCommentsObj = {};
-        await Promise.all(posts.map(async (post) => {
-          const commentsResponse = await axios.get(`${port_uri}app/post/get-comments/${post._id}`, { headers });
-          postCommentsObj[post._id] = {
-            commentsCount: commentsResponse.data.numberOfComments,
-            usersWhoComment: commentsResponse.data.comments,
-          };
-        }));
-        setPostComment(postCommentsObj);
-      } catch (error) {
-        console.log(error);
-        if (error.response) {
-          toast.error(error.response.data.message);
-        }
-      }
-    };
-    fetch();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className='h-screen flex items-center justify-center'>
-        <div className={`${styles.loader}`}></div>;
-      </div>
-    )
-  }
-
 
   //Delete Post
   const deletePost = async (post) => {
@@ -377,6 +264,14 @@ const page = () => {
         toast.error("Error occurred while sending request");
       }
     }
+  };
+
+  if (isLoading) {
+    return (
+      <div className='h-screen flex items-center justify-center'>
+        <div className={`${styles.loader}`}></div>;
+      </div>
+    )
   }
 
   return (
@@ -387,7 +282,7 @@ const page = () => {
             <label htmlFor='image'>
               {userPic ?
                 (<div className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full overflow-hidden'>
-                  <img src={userPic} alt='preview' className='object-cover h-full w-full'/>
+                  <img src={userPic} alt='preview' className='object-cover h-full w-full' />
                 </div>)
                 :
                 (<LuUserCircle2 size={200} />)}
@@ -403,7 +298,7 @@ const page = () => {
                 <img
                   src={URL.createObjectURL(profilePicture)}
                   alt='preview'
-                  className='object-cover w-full h-full'/>
+                  className='object-cover w-full h-full' />
               </div>)}
             
             {croppedImagePreview && (
@@ -480,7 +375,7 @@ const page = () => {
                 className='border-s-2 border-b-2 hover:outline-none hover:border-s-black hover:border-b-black focus:outline-none focus:border-s-blue-600 focus:border-b-blue-600'
               />
             ) : (
-                <p className={`font-serif text-lg text-slate-800 font-semibold ${rubik.className}`}>{userBio}</p>
+              <p className={`font-serif text-lg text-slate-800 font-semibold ${rubik.className}`}>{userBio}</p>
             )
           }
 
@@ -505,112 +400,21 @@ const page = () => {
         </div>
         
       </div>
-
-      {userPosts.map((post, index) => (
-        <div
-          key={index}
-          className={`my-6 p-6 relative ${styles.postBox}`}>
-          <div
-            onMouseOver={() => setHoverStates({ ...hoverStates, [post._id]: true })}
-            onMouseOut={() => setHoverStates({ ...hoverStates, [post._id]: false })}
-            onClick={() => deletePost(post)}
-            className='absolute top-4 right-1'
-          >
-            {hoverStates[post._id] ? <IoTrashBin size={30} color='red' /> : <IoTrashBinOutline size={30} color='red' />}
-          </div>
-
-          <div className='flex items-end gap-1'>
-
-            {post.profilePic ?
-              (<div className='w-10 h-10 object-cover rounded-full overflow-hidden'>
-                <img
-                src={post.profilePic}
-                alt={post.name} className='object-cover w-full h-full' />
-              </div>)
-              : post.profilePic = ' '
-                (<FaUserCircle
-                  size={30} />)}
-            <div className={`text-xl ${bree_serif.className}`}>
-              {post.name}
-            </div>
-          </div>
-
-          <div className='ml-10 text-xs font-light'>
-            {moment(post.date).format('MMMM Do, YYYY')}
-          </div>
-
-          {post.title && (
+      <div>
+        {userPosts.map((post, index) => (
+          <div key={index} className='relative'>
             <div
-              className='ml-10'>
-              {post.title}
-            </div>)}
-            
-          <div>{
-            post.hashtags && post.hashtags.map((tag, index) => (
-              <p key={index} className='ml-10 text-blue-600'>{` #${tag} `}</p>
-            ))}
-          </div>
-
-          {post.photoUrl ?
-            (<div className='overflow-hideen w-80 h-80 object-cover rounded-md ml-10'>
-              <img src={post.photoUrl} alt={post.title} className='object-cover w-full h-full' />
-            </div>)
-            :
-            (<div
-              className={`${styles.postBox_forText} w-80 h-80 object-cover rounded-md ml-10 text-white text-lg font-semibold`}
-              style={{ backgroundColor: post.theme }}
+              onMouseOver={() => setHoverStates({ ...hoverStates, [post._id]: true })}
+              onMouseOut={() => setHoverStates({ ...hoverStates, [post._id]: false })}
+              onClick={() => deletePost(post)}
+              className='absolute top-4 right-1 z-10'
             >
-              {post.textContent}
-            </div>)}
-
-          <div className='flex justify-between items-center ml-10 mt-8 px-5 border-t-2'>
-            <div className='flex gap-2 items-start'>
-              <p className='font-semibold text-xl mt-[1px]'>{postLikes[post._id] ? postLikes[post._id].likesCount : 0}</p>
-              {postLikes[post._id] && postLikes[post._id].hasLiked ? (
-                <FaThumbsUp size={20} color='blue' />
-              ) : (
-                <FaRegThumbsUp size={20} color='blue' onClick={() => addLike(post)} />
-              )}
-              <details className='text-blue-600 text-xl'>
-                <summary></summary>
-                <div className={`${bree_serif.className} absolute left-[12px] bg-slate-400 p-4 rounded-lg z-10`}>
-                  {postLikes[post._id] && postLikes[post._id].usersWhoLike.map((users, index) => (
-                    <p key={index}>{users.userId.name} </p>
-                  ))}
-                </div>
-              </details>
+              {hoverStates[post._id] ? <IoTrashBin size={30} color='red' /> : <IoTrashBinOutline size={30} color='red' />}
             </div>
-            <div className='flex items-start gap-2'>
-              <div className='font-semibold text-xl'>{postComment[post._id] ? postComment[post._id].commentsCount : 0}</div>
-              <FaRegComment size={20} color='blue' className='mt-[1px]' onClick={() => doComment(post._id)} />
-              <details className='text-blue-600 text-xl '>
-                <summary> </summary>
-                <div className='absolute right-[12px] bg-slate-400 p-4 rounded-lg z-10'>
-                  {postComment[post._id] && postComment[post._id].usersWhoComment.map((comment, index) => (
-                    <div key={index}>
-                      <p className={`${bree_serif.className} font-semibold text-blue-500 text-lg`}>{comment.userId.name}</p>
-                      <p className='ml-6 text-black font-xs'>{comment.comment}</p>
-                    </div>
-                  ))}
-                </div>
-              </details>
-            </div>
+            <Card post={post} />
           </div>
-
-          {openCommentInput[post._id] && (
-
-            <div className='flex items-center justify-end mt-4'>
-              <input
-                type="text"
-                className='border-l-2 border-l-blue-600 border-b-2 border-b-blue-600 focus:outline-none focus:border-l-blue-800 focus:border-b-blue-800'
-                placeholder="Add a comment..."
-                value={AddComment}
-                onChange={(e) => { setAddComment(e.target.value); }} />
-              <button className='ml-2' onClick={() => addComments(post)}><IoMdSend size={20} /></button>
-            </div>
-          )}
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }

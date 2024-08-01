@@ -1,9 +1,9 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import ContactLogo from "../assets/Contact.png"
-import DoMsg from "../assets/DoMsg.png"
-import styles from "../styles/allcss.module.css"
+import ContactLogo from "../../assets/Contact.png"
+import DoMsg from "../../assets/DoMsg.png"
+import styles from "../../styles/allcss.module.css"
 import axios from 'axios'
 import io from "socket.io-client"
 import { LuUserCircle2 } from "react-icons/lu";
@@ -175,7 +175,7 @@ const Contact = () => {
                 onClick={() => setSelectedUser(user)}
               >
                 {user.profilePic ? (
-                  <img src={user.profilePic} className="w-10 h-10 rounded-full mr-4" alt={user.name} />
+                  <div className="w-10 h-10 rounded-full mr-4 overflow-hidden"><img src={user.profilePic} className='object-cover w-ful h-full' alt={user.name} /></div>
                 ) : (
                   <LuUserCircle2 size={48} className="mr-4" />
                 )}
@@ -194,7 +194,7 @@ const Contact = () => {
           <div>
             <div className='flex items-center justify-between px-2 border-b-2 border-black mb-2 pt-2'>
               <div className='flex items-end'>
-                {selectedUser.profilePic ? <img src={selectedUser.profilePic} className="w-10 h-10 rounded-full mr-4" alt={selectedUser.name} /> : <LuUserCircle2 size={48} className="mr-4" />}
+                {selectedUser.profilePic ? <div className="w-10 h-10 rounded-full mr-4 overflow-hidden"> <img src={selectedUser.profilePic} className="object-cover w-full h-full" alt={selectedUser.name} /> </div> : <LuUserCircle2 size={48} className="mr-4" />}
                 <span className='text-xs font-bold'>{selectedUser.name}</span>
               </div>
               <div

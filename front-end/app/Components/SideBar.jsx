@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter , usePathname } from 'next/navigation'
-import styles from "../styles/allcss.module.css"
-import Message from "../assets/Message.png"
-import Home from "../assets/Home.png"
-import Create from "../assets/Create.png"
+import styles from "../../styles/allcss.module.css"
+import Message from "../../assets/Message.png"
+import Home from "../../assets/Home.png"
+import Create from "../../assets/Create.png"
 import axios from 'axios'
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { Ubuntu } from 'next/font/google'

@@ -1,12 +1,12 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import styles from "../styles/allcss.module.css";
+import styles from "../../styles/allcss.module.css";
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import logo from "../assets/logo.jpg";
+import logo from "../../assets/logo.jpg";
 import { IoCreate } from "react-icons/io5";
 import { IoCreateOutline } from "react-icons/io5";
 import { GoHomeFill } from "react-icons/go";
