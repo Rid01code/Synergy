@@ -294,7 +294,7 @@ const page = () => {
               onChange={handleImage}
             />
             {profilePicture && (
-              <div className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10 overflow-hidden'>
+              <div className='w-[200px] h-[200px] border-4 border-sky-600 rounded-full absolute top-0 z-10 overflow-hidden flex justify-center items-center '>
                 <img
                   src={URL.createObjectURL(profilePicture)}
                   alt='preview'
@@ -311,20 +311,20 @@ const page = () => {
             )}
 
             {profilePicture && isCropping && (
-              <div className={`w-80 h-96 flex flex-col items-center justify-between p-5 absolute top-0 right-[-64px] z-30 ${styles.navUI}`}>
+              <div className={`w-80 h-96 flex flex-col items-center mt-5 p-5 absolute top-0 right-[-50px] z-30 ${styles.navUI}`}>
                 <ReactCrop
                   src={URL.createObjectURL(profilePicture)}
                   crop={crop}
                   onChange={(newCrop) => setCrop(newCrop)}
                   onComplete={(c) => setCompletedCrop(c)}
                   aspect={1}
-                  className='w-80 h-72 overflow-hidden flex justify-center items-center'
+                  className='flex justify-center items-center w-80 h-80 overflow-hidden'
                 >
                   <img
                     ref={imgRef}
                     src={URL.createObjectURL(profilePicture)}
                     alt="Crop me"
-                    className='object-cover w-full h-full'
+                    className='object-contain w-full h-full'
                   />
                 </ReactCrop>
                 <div className='flex justify-between gap-2'>

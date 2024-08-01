@@ -238,7 +238,7 @@ const Page = ({ closeButton }) => {
                       ref={imgRef}
                       src={URL.createObjectURL(image)}
                       alt="Crop me" 
-                      className='w-full h-full object-cover'
+                      className='w-full h-full object-contain'
                   />
                 </div>
               </ReactCrop>
