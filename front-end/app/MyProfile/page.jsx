@@ -324,7 +324,7 @@ const page = () => {
                     ref={imgRef}
                     src={URL.createObjectURL(profilePicture)}
                     alt="Crop me"
-                    className='object-contain w-full h-full'
+                    className='object-fit w-full h-full'
                   />
                 </ReactCrop>
                 <div className='flex justify-between gap-2'>
